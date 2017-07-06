@@ -17,7 +17,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.view_h
     public adapter_history(History history) {
 
         this.history=history;
-        
+
     }
 
     @Override
