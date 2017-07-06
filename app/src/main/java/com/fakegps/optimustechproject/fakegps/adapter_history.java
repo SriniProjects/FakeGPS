@@ -19,6 +19,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.view_h
         this.history=history;
 
     }
+    
 
     @Override
     public view_holder onCreateViewHolder(ViewGroup parent, int viewType) {
