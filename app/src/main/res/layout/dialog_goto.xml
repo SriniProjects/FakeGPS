@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Latitude"
+        android:inputType="numberDecimal"
+        android:id="@+id/lati_et"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Longitude"
+        android:inputType="numberDecimal"
+        android:id="@+id/longi_et"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go"
+        android:layout_marginTop="10dp"
+        android:id="@+id/go_to"
+        android:background="#2d5d82"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
