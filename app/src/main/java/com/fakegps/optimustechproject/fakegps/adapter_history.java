@@ -25,6 +25,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.view_h
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_history,parent,false);
         return new view_holder(view);
     }
+    
 
     @Override
     public void onBindViewHolder(final view_holder holder, int position) {
