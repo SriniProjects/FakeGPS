@@ -35,6 +35,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.view_h
 
         holder.place.setText(history.getCity().get(position)+" ,"+history.getCountry().get(position));
         holder.lati.setText(history.getLatitude().get(position)+" ,"+history.getLongitude().get(position));
+
     }
 
     @Override
