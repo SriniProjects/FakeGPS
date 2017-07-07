@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by satyam on 5/7/17.
@@ -36,12 +37,21 @@ public class dialog_goto extends DialogFragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                la=Double.valueOf(lati.getText().toString());
-                lo=Double.valueOf(longi.getText().toString());
 
-                Intent intent=new Intent(getActivity(),NavigationActivity.class);
-                DbHandler.putString(getActivity(),"go_to_specific",String.valueOf(String.valueOf(la)+"%"+String.valueOf(lo)));
-                startActivity(intent);
+                if(!lati.getText().toString().equals("") & !longi.getText().toString().equals("")) {
+                    la = Double.valueOf(lati.getText().toString());
+                    lo = Double.valueOf(longi.getText().toString());
+
+                    Intent intent = new Intent(getActivity(), NavigationActivity.class);
+                    if(DbHandler.contains(getActivity(),"go_to_specific_search")){
+                        DbHandler.remove(getActivity(),"go_to_specific_search");
+                    }
+                    DbHandler.putString(getActivity(), "go_to_specific", String.valueOf(String.valueOf(la) + "%" + String.valueOf(lo)));
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getActivity(),"Please enter latitude and longitude",Toast.LENGTH_LONG).show();
+                }
 
             }
         });

@@ -119,6 +119,9 @@ public class NavigationActivity extends AppCompatActivity
         if(DbHandler.contains(NavigationActivity.this,"go_to_specific")){
             DbHandler.remove(NavigationActivity.this,"go_to_specific");
         }
+        if(DbHandler.contains(NavigationActivity.this,"go_to_specific_search")){
+            DbHandler.remove(NavigationActivity.this,"go_to_specific_search");
+        }
     }
 
 

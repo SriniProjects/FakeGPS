@@ -88,6 +88,9 @@ public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
                 public void onClick(View v) {
 
                     Intent intent=new Intent(context,NavigationActivity.class);
+                    if(DbHandler.contains(context,"go_to_specific_search")){
+                        DbHandler.remove(context,"go_to_specific_search");
+                    }
                     DbHandler.putString(context,"go_to_specific",String.valueOf(String.valueOf(fav.getLatitude().get(getAdapterPosition()))+"%"+String.valueOf(fav.getLongitude().get(getAdapterPosition()))));
                     context.startActivity(intent);
 
