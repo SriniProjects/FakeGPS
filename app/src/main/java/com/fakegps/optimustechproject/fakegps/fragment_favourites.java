@@ -31,7 +31,8 @@ public class fragment_favourites extends Fragment {
         no_mock=(TextView)parentView.findViewById(R.id.no_mock);
         recyclerView=(RecyclerView)parentView.findViewById(R.id.recycler);
 
-        
+
+
         if(DbHandler.contains(getContext(),"favourites")){
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
