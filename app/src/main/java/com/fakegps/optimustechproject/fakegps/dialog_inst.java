@@ -19,6 +19,7 @@ import android.widget.EditText;
     View view;
     Button close;
 
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
