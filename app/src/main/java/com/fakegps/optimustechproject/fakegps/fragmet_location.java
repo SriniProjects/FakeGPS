@@ -2,6 +2,8 @@ package com.fakegps.optimustechproject.fakegps;
 
 import android.Manifest;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +52,7 @@ import java.util.Locale;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by satyam on 5/7/17.
@@ -77,6 +80,9 @@ public class fragmet_location extends Fragment {
     List<String> city2=new ArrayList<String>(),country2=new ArrayList<String>();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     String[] l;
+    String map_type;
+    Notification noti;
+    NotificationManager nMN;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -90,10 +96,15 @@ public class fragmet_location extends Fragment {
         search_ll=(LinearLayout)getActivity().findViewById(R.id.search_ll);
 
         progress=new ProgressDialog(getContext());
-        progress.setMessage("Locating...");
+        progress.setMessage(getResources().getString(R.string.locating));
         progress.setCancelable(false);
         progress.setIndeterminate(true);
-       // progress.show();
+        // progress.show();
+
+        la=lati;
+        lo=longi;
+        ci="";
+        co="";
 
         mMapView = (MapView) parentView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -104,6 +115,14 @@ public class fragmet_location extends Fragment {
             MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if(DbHandler.contains(getActivity(),"map_type")){
+            map_type=DbHandler.getString(getActivity(),"map_type","");
+        }
+        else{
+            map_type="normal";
+            DbHandler.putString(getActivity(),"map_type","normal");
         }
 
         final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
@@ -122,7 +141,7 @@ public class fragmet_location extends Fragment {
             Log.e("loc",String.valueOf(l));
         }
 
-       else if(DbHandler.contains(getActivity(),"go_to_specific")){
+        else if(DbHandler.contains(getActivity(),"go_to_specific")){
 
             l=DbHandler.getString(getActivity(),"go_to_specific","").split("%");
             lati=Double.valueOf(l[0]);
@@ -132,6 +151,7 @@ public class fragmet_location extends Fragment {
 
             la=lati;
             lo=longi;
+
 
         }
         else {
@@ -154,21 +174,17 @@ public class fragmet_location extends Fragment {
 
                         location.setText(addresses.get(0).getLocality() + " " + addresses.get(0).getCountryName() + "\n" + String.valueOf(lati) + " " + String.valueOf(longi));
 
-                        //progress.setVisibility(View.GONE);
                     } else {
-                        //Toast.makeText(getContext(), "Unable to get location.. Try again later ", Toast.LENGTH_LONG).show();
+
                     }
 
                 } catch (Exception e) {
                     location.setText("");
-                   // Toast.makeText(getContext(), "Unable to get location.. Try again later ", Toast.LENGTH_LONG).show();
-
                     e.printStackTrace();
 
                 }
             } else {
                 progress.dismiss();
-                //progress.setVisibility(View.GONE);
 
                 gpsTracker.showSettingsAlert();
             }
@@ -187,8 +203,24 @@ public class fragmet_location extends Fragment {
                 googleMap.setMyLocationEnabled(true);
 
                 LatLng loc = new LatLng(lati,longi);
-                //Toast.makeText(getContext(),lati.toString()+longi.toString(),Toast.LENGTH_SHORT).show();
-                googleMap.addMarker(new MarkerOptions().position(loc).title("Marker Title").snippet("Marker Description"));
+
+                if(map_type.equals("normal")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+                if(map_type.equals("terrain")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }
+                if(map_type.equals("satellite")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }
+                if(map_type.equals("hybrid")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+                if(map_type.equals("none")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                }
+
+                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
 
                 List<Address> addresses2;
                 try {
@@ -200,8 +232,7 @@ public class fragmet_location extends Fragment {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                   // location.setText("");
-                    Toast.makeText(getContext(),"Please check your internet connection for more accuracy",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -212,7 +243,7 @@ public class fragmet_location extends Fragment {
                     @Override
                     public void onMapClick(LatLng latLng) {
                         googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions().position(latLng).title("Marker Title").snippet("Marker Description"));
+                        googleMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
 
                         lati=latLng.latitude;
                         longi=latLng.longitude;
@@ -234,29 +265,9 @@ public class fragmet_location extends Fragment {
                         } catch (IOException e) {
                             e.printStackTrace();
                             location.setText("");
-                            Toast.makeText(getContext(),"Please check your internet connection for more accuracy",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
                         }
 
-//                        if(DbHandler.contains(getContext(),"favourites")) {
-//                            favourites = gson.fromJson(DbHandler.getString(getContext(), "favourites", "{}"), History.class);
-//                            latitude2 = favourites.getLatitude();
-//                            longitude2 = favourites.getLongitude();
-//                            city2 = favourites.getCity();
-//                            country2 = favourites.getCountry();
-//
-//                            if(latitude.contains(lati) && longitude.contains(longi)){
-//                                add_to_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_black_24dp));
-//                                add_to_fav.setColorFilter(getResources().getColor(R.color.white));
-//                                //  flg=1;
-//                            }
-//                            else{
-//                                //flg=0;
-//                                add_to_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
-//                                add_to_fav.setColorFilter(getResources().getColor(R.color.white));
-//
-//                            }
-//
-//                        }
 
                     }
                 });
@@ -277,7 +288,6 @@ public class fragmet_location extends Fragment {
                         longi=marker.getPosition().longitude;
 
 
-                        //Toast.makeText(getContext(),String.valueOf(marker.getPosition().latitude+" "+marker.getPosition().longitude),Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -325,7 +335,17 @@ public class fragmet_location extends Fragment {
 
                     }
 
-                    Toast.makeText(getContext(),"Location set successfully",Toast.LENGTH_SHORT).show();
+                    nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+                    noti = new Notification.Builder(getContext())
+                            .setContentTitle(getResources().getString(R.string.new_mock))
+                            .setContentText(ci+" ,"+co+"\n"+la+","+lo)
+                            .setSmallIcon(R.drawable.ic_map_black_24dp)
+                            .build();
+                    // noti.flags = Notification.FLAG_NO_CLEAR;
+                    nMN.notify(100, noti);
+
+
+                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet2),Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -335,55 +355,53 @@ public class fragmet_location extends Fragment {
                     flg=0;
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
                     fab.setColorFilter(getResources().getColor(R.color.white));
-                   // setCurrent();
-
                 }
             }
         });
 
         add_to_fav.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-                                              if(!location.getText().toString().equals("")) {
-                                                  // History his=new History(lati,longi,addresses.get(0).getLocality(),addresses.get(0).getCountryName());
-                                                  if (DbHandler.contains(getContext(), "favourites")) {
-                                                      favourites = gson.fromJson(DbHandler.getString(getContext(), "favourites", "{}"), History.class);
-                                                      latitude = favourites.getLatitude();
-                                                      longitude = favourites.getLongitude();
-                                                      city = favourites.getCity();
-                                                      country = favourites.getCountry();
+                if(!location.getText().toString().equals("")) {
 
-                                                      latitude.add(la);
-                                                      longitude.add(lo);
-                                                      city.add(ci);
-                                                      country.add(co);
+                    if (DbHandler.contains(getContext(), "favourites")) {
+                        favourites = gson.fromJson(DbHandler.getString(getContext(), "favourites", "{}"), History.class);
+                        latitude = favourites.getLatitude();
+                        longitude = favourites.getLongitude();
+                        city = favourites.getCity();
+                        country = favourites.getCountry();
 
-                                                      History fav = new History(latitude, longitude, city, country);
+                        latitude.add(la);
+                        longitude.add(lo);
+                        city.add(ci);
+                        country.add(co);
 
-                                                      DbHandler.putString(getContext(), "favourites", gson.toJson(fav));
+                        History fav = new History(latitude, longitude, city, country);
 
-                                                  } else {
+                        DbHandler.putString(getContext(), "favourites", gson.toJson(fav));
 
-                                                      latitude.add(la);
-                                                      longitude.add(lo);
-                                                      city.add(ci);
-                                                      country.add(co);
+                    } else {
 
-                                                      History fav = new History(latitude, longitude, city, country);
+                        latitude.add(la);
+                        longitude.add(lo);
+                        city.add(ci);
+                        country.add(co);
 
-                                                      DbHandler.putString(getContext(), "favourites", gson.toJson(fav));
+                        History fav = new History(latitude, longitude, city, country);
 
-                                                  }
+                        DbHandler.putString(getContext(), "favourites", gson.toJson(fav));
+
+                    }
 
 
-                                                  Toast.makeText(getContext(), "Place added to favourites", Toast.LENGTH_SHORT).show();
-                                                  add_to_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_black_24dp));
-                                                  add_to_fav.setColorFilter(getResources().getColor(R.color.white));
-                                              }
-                                              else{
-                                                  Toast.makeText(getContext(), "Unable to get location details.Please check your internet connection", Toast.LENGTH_SHORT).show();
-                                              }
+                    Toast.makeText(getContext(), getResources().getString(R.string.added_to_fav), Toast.LENGTH_SHORT).show();
+                    add_to_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_black_24dp));
+                    add_to_fav.setColorFilter(getResources().getColor(R.color.white));
+                }
+                else{
+                    Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -391,13 +409,13 @@ public class fragmet_location extends Fragment {
             @Override
             public void onClick(View v) {
                 if(location.getText().toString().equals("")){
-                    Toast.makeText(getContext(),"No location set",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),getResources().getString(R.string.no_loc),Toast.LENGTH_LONG).show();
                 }
                 else{
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT,
-                            "Hey check out my new location \n"+location.getText().toString());
+                            getResources().getString(R.string.check_new_loc)+" \n"+location.getText().toString());
                     sendIntent.setType("text/plain");
                     startActivity(sendIntent);
                 }
@@ -458,7 +476,7 @@ public class fragmet_location extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-       // mMapView.onPause();
+        // mMapView.onPause();
     }
 
     @Override
@@ -483,7 +501,7 @@ public class fragmet_location extends Fragment {
         String mocLocationProvider = LocationManager.GPS_PROVIDER;//lm.getBestProvider( criteria, true );
 
         if ( mocLocationProvider == null ) {
-            Toast.makeText(getContext(), "No location provider found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
             return;
         }
         lm.addTestProvider(mocLocationProvider, false, false,
@@ -502,8 +520,7 @@ public class fragmet_location extends Fragment {
             mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
         }
         lm.setTestProviderLocation( mocLocationProvider, mockLocation);
-        Toast.makeText(getContext(), "Working", Toast.LENGTH_SHORT).show();
+
     }
 }
-
 

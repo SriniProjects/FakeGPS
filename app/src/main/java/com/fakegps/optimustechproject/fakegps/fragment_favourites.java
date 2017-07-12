@@ -43,7 +43,7 @@ public class fragment_favourites extends Fragment {
         else{
             recyclerView.setVisibility(View.GONE);
             no_mock.setVisibility(View.VISIBLE);
-            no_mock.setText("No favourites added");
+            no_mock.setText(getResources().getString(R.string.no_fav));
         }
 
         return parentView;

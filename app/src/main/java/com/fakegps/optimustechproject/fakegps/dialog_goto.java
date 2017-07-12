@@ -50,7 +50,7 @@ public class dialog_goto extends DialogFragment {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(getActivity(),"Please enter latitude and longitude",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),getResources().getString(R.string.toast_enter_lat_lon),Toast.LENGTH_LONG).show();
                 }
 
             }

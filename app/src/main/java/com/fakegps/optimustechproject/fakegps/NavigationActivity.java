@@ -69,15 +69,15 @@ public class NavigationActivity extends AppCompatActivity
         String fragClassName = fragment.getClass().getName();
         if(fragClassName.equals(fragmet_location.class.getName())){
             navigationView.getMenu().getItem(0).setChecked(true);
-            setTitle("Set Mock Location");
+            setTitle(getResources().getString(R.string.set_mock));
         }
         if(fragClassName.equals(fragment_history.class.getName())){
             navigationView.getMenu().getItem(2).setChecked(true);
-            setTitle("History");
+            setTitle(getResources().getString(R.string.history));
         }
         if(fragClassName.equals(fragment_favourites.class.getName())){
             navigationView.getMenu().getItem(3).setChecked(true);
-            setTitle("Favourites");
+            setTitle(getResources().getString(R.string.fav));
         }
 
 
@@ -102,7 +102,7 @@ public class NavigationActivity extends AppCompatActivity
                 }
                 this.doubleBackToExitPressedOnce = true;
 
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Press once again to exit", Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.once_again), Snackbar.LENGTH_SHORT);
 
                 snackbar.show();
 
@@ -149,7 +149,15 @@ public class NavigationActivity extends AppCompatActivity
                 break;
             case R.id.go_to:
                 dialog_goto dialog_goto = new dialog_goto();
-                dialog_goto.show(getFragmentManager(),"Go To");
+                dialog_goto.show(getFragmentManager(),getResources().getString(R.string.go_to));
+                break;
+            case R.id.map_type:
+                dialog_map_type dialog_map_type = new dialog_map_type();
+                dialog_map_type.show(getFragmentManager(),getResources().getString(R.string.go_to));
+                break;
+            case R.id.instructions:
+                dialog_inst dialog_inst = new dialog_inst();
+                dialog_inst.show(getFragmentManager(),getResources().getString(R.string.inst));
                 break;
 
             default:fragmentClass=fragmet_location.class;

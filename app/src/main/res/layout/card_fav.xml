@@ -36,7 +36,6 @@
                 android:id="@+id/place"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:text="Delhi, India"
                 android:textSize="20dp"
                 android:textStyle="bold|italic"
                 android:textColor="@color/colorPrimaryDark"/>
@@ -48,7 +47,7 @@
                     <Button
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="Locate"
+                        android:text="@string/locate"
                         android:id="@+id/locate"
                         android:textColor="@color/colorPrimaryDark"
                         android:background="@color/white"/>
@@ -67,7 +66,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/lati_longi"
-                android:text="Delhi, India"
                 android:textSize="16dp"
                 android:textStyle="italic"
                 android:textColor="@color/colorPrimaryDark"/>

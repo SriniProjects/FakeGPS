@@ -38,7 +38,7 @@
                     android:textSize="16dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
-                    android:text="Search" />
+                    android:text="@string/search" />
 
                 <ImageView
                     android:layout_width="wrap_content"

@@ -19,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/place"
-            android:text="Delhi, India"
             android:textSize="20dp"
             android:textStyle="bold|italic"
             android:textColor="@color/colorPrimaryDark"/>
@@ -35,7 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/lati_longi"
-                android:text="Delhi, India"
                 android:textSize="16dp"
                 android:textStyle="italic"
                 android:textColor="@color/colorPrimaryDark"/>

@@ -77,7 +77,7 @@ public class GPSTracker extends Service implements LocationListener {
                     if(!fine_loc() && !coarse_loc()){
                         requestLoc();
                         if(!fine_loc() && !coarse_loc()){
-                            Toast.makeText(mContext,"Oops you just denied the permission",Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext,mContext.getResources().getString(R.string.denied_per),Toast.LENGTH_LONG).show();
                             return  null;
                         }
                     }
@@ -215,13 +215,13 @@ public class GPSTracker extends Service implements LocationListener {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
-        alertDialog.setTitle("GPS is settings");
+        alertDialog.setTitle(mContext.getResources().getString(R.string.gps_settings));
 
         // Setting Dialog Message
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+        alertDialog.setMessage(mContext.getResources().getString(R.string.enable_gps));
 
         // On pressing Settings button
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(mContext.getResources().getString(R.string.settings), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
@@ -229,7 +229,7 @@ public class GPSTracker extends Service implements LocationListener {
         });
 
         // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton(mContext.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }

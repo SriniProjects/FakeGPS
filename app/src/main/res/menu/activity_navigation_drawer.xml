@@ -6,34 +6,47 @@
         <item
             android:id="@+id/mock"
             android:icon="@drawable/ic_local_airport_black_24dp"
-            android:title="Set mock location" />
+            android:title="@string/set_mock" />
         <item
             android:id="@+id/go_to"
             android:icon="@drawable/ic_edit_location_black_24dp"
-            android:title="Go To" />
+            android:title="@string/go_to" />
+
+        <item
+            android:id="@+id/map_type"
+            android:icon="@drawable/ic_map_black_24dp"
+            android:title="@string/change_map_type" />
 
         <item
             android:id="@+id/history"
             android:icon="@drawable/ic_history_black_24dp"
-            android:title="History" />
+            android:title="@string/history" />
 
         <item
             android:id="@+id/favourites"
             android:icon="@drawable/ic_favorite_black_24dp"
-            android:title="Favourites" />
+            android:title="@string/fav" />
 
     </group>
 
     <group android:checkableBehavior="single"
         android:id="@+id/menu2">
         <item
+            android:id="@+id/instructions"
+            android:icon="@drawable/ic_insert_comment_black_24dp"
+            android:title="@string/inst" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/settings" />
+        <item
             android:id="@+id/about"
             android:icon="@drawable/ic_perm_device_information_black_24dp"
-            android:title="About Us" />
+            android:title="@string/about_us" />
         <item
             android:id="@+id/faq"
             android:icon="@drawable/ic_question_answer_black_24dp"
-            android:title="FAQ" />
+            android:title="@string/faq" />
 
     </group>
 

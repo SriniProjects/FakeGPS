@@ -8,7 +8,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Latitude"
+        android:hint="@string/latitude"
         android:inputType="numberDecimal"
         android:id="@+id/lati_et"/>
 
@@ -16,14 +16,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Longitude"
+        android:hint="@string/longitude"
         android:inputType="numberDecimal"
         android:id="@+id/longi_et"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Go"
+        android:text="@string/go"
         android:layout_marginTop="10dp"
         android:id="@+id/go_to"
         android:background="#2d5d82"

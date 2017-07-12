@@ -75,7 +75,7 @@ public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
                     DbHandler.putString(context,"favourites",gson.toJson(fav2));
 
                     Intent intent=new Intent(context,NavigationActivity.class);
-                    Toast.makeText(context,"Item removed from favourites",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,context.getResources().getString(R.string.toast_item_removed_from_fav),Toast.LENGTH_SHORT).show();
                     context.startActivity(intent);
 
 //                    notifyItemRemoved(getAdapterPosition());
