@@ -17,7 +17,6 @@ import android.widget.EditText;
     public class dialog_inst extends DialogFragment {
 
     View view;
-    
     Button close;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
