@@ -31,6 +31,7 @@ import android.widget.EditText;
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
                 startActivity(intent);
+                
             }
         });
 
