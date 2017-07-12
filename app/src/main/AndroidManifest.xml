@@ -12,7 +12,10 @@ package="com.fakegps.optimustechproject.fakegps">
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCy5JtW-3TmWkxrrZxg513KMUcQ7_3mPR4" />
 
     <activity android:name=".NavigationActivity"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:configChanges="locale|orientation">
+
+        <receiver android:name=".ActionReceiver"/>
 
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -20,6 +23,7 @@ package="com.fakegps.optimustechproject.fakegps">
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
+
 
 </application>
 

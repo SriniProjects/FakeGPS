@@ -4,10 +4,14 @@ import android.Manifest;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -19,10 +23,12 @@ import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,6 +89,8 @@ public class fragmet_location extends Fragment {
     String map_type;
     Notification noti;
     NotificationManager nMN;
+    Locale myLocale;
+    Button set;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -95,6 +103,7 @@ public class fragmet_location extends Fragment {
         location=(TextView)parentView.findViewById(R.id.location);
         search_ll=(LinearLayout)getActivity().findViewById(R.id.search_ll);
 
+        set=(Button)parentView.findViewById(R.id.btn_set_loc);
         progress=new ProgressDialog(getContext());
         progress.setMessage(getResources().getString(R.string.locating));
         progress.setCancelable(false);
@@ -148,7 +157,6 @@ public class fragmet_location extends Fragment {
             longi=Double.valueOf(l[1]);
 
             location.setText("");
-
             la=lati;
             lo=longi;
 
@@ -294,6 +302,85 @@ public class fragmet_location extends Fragment {
             }
         });
 
+        set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.e("history",DbHandler.getString(getContext(),"history","{}"));
+                if(flg==0) {
+                    flg=1;
+                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_black_24dp));
+                    fab.setColorFilter(getResources().getColor(R.color.white));
+                    setMock();
+
+                    if(DbHandler.contains(getContext(),"history")){
+                        history=gson.fromJson(DbHandler.getString(getContext(),"history","{}"),History.class);
+                        latitude=history.getLatitude();
+                        longitude=history.getLongitude();
+                        city=history.getCity();
+                        country=history.getCountry();
+
+                        latitude.add(la);
+                        longitude.add(lo);
+                        city.add(ci);
+                        country.add(co);
+
+                        History his=new History(latitude,longitude,city,country);
+
+                        DbHandler.putString(getContext(),"history",gson.toJson(his));
+
+                    }
+                    else{
+
+                        latitude.add(la);
+                        longitude.add(lo);
+                        city.add(ci);
+                        country.add(co);
+
+                        History his=new History(latitude,longitude,city,country);
+
+                        DbHandler.putString(getContext(),"history",gson.toJson(his));
+
+                    }
+
+                    Intent intentAction = new Intent(getContext(),NavigationActivity.class);
+                    intentAction.putExtra("action","actionStop");
+                    PendingIntent pIntent = PendingIntent.getActivity(getContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                    nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+                    noti = new Notification.Builder(getContext())
+                            .setContentTitle(getResources().getString(R.string.new_mock))
+                            .setContentText(ci+" ,"+co+"\n"+la+","+lo)
+                            .setSmallIcon(R.drawable.ic_map_black_24dp)
+                            .setAutoCancel(true)
+                            .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
+                            .setOngoing(true)
+                            .build();
+
+                    noti.flags = Notification.FLAG_NO_CLEAR;
+                    nMN.notify(0, noti);
+
+
+
+                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet2),Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else{
+                    flg=0;
+                    nMN.cancelAll();
+                    setCurrent();
+                    Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
+                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    fab.setColorFilter(getResources().getColor(R.color.white));
+                }
+            }
+        });
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -335,14 +422,24 @@ public class fragmet_location extends Fragment {
 
                     }
 
+                    Intent intentAction = new Intent(getContext(),NavigationActivity.class);
+                    intentAction.putExtra("action","actionStop");
+                    PendingIntent pIntent = PendingIntent.getActivity(getContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
                     nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
                     noti = new Notification.Builder(getContext())
                             .setContentTitle(getResources().getString(R.string.new_mock))
                             .setContentText(ci+" ,"+co+"\n"+la+","+lo)
                             .setSmallIcon(R.drawable.ic_map_black_24dp)
+                            .setAutoCancel(true)
+                            .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
+                            .setOngoing(true)
                             .build();
-                    // noti.flags = Notification.FLAG_NO_CLEAR;
-                    nMN.notify(100, noti);
+
+                    noti.flags = Notification.FLAG_NO_CLEAR;
+                    nMN.notify(0, noti);
+
 
 
                     Toast.makeText(getContext(),getResources().getString(R.string.check_internet2),Toast.LENGTH_SHORT).show();
@@ -353,6 +450,9 @@ public class fragmet_location extends Fragment {
                 }
                 else{
                     flg=0;
+                    nMN.cancelAll();
+                    setCurrent();
+                    Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
                     fab.setColorFilter(getResources().getColor(R.color.white));
                 }
@@ -402,6 +502,7 @@ public class fragmet_location extends Fragment {
                 else{
                     Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
                 }
+               // setLocale("hi");
             }
         });
 
@@ -522,5 +623,77 @@ public class fragmet_location extends Fragment {
         lm.setTestProviderLocation( mocLocationProvider, mockLocation);
 
     }
+
+    private void setCurrent(){
+        LocationManager lm = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy( Criteria.ACCURACY_FINE );
+
+        String mocLocationProvider = LocationManager.GPS_PROVIDER;//lm.getBestProvider( criteria, true );
+
+        if ( mocLocationProvider == null ) {
+            Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        lm.addTestProvider(mocLocationProvider, false, false,
+                false, false, true, true, true, 0, 5);
+        lm.setTestProviderEnabled(mocLocationProvider, true);
+
+        Location loc = new Location(mocLocationProvider);
+        Location mockLocation = new Location(mocLocationProvider); // a string
+        mockLocation.setLatitude(curr_lati);  // double
+        mockLocation.setLongitude(curr_longi);
+        mockLocation.setAltitude(loc.getAltitude());
+        mockLocation.setTime(System.currentTimeMillis());
+        mockLocation.setAccuracy(1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+        }
+        lm.setTestProviderLocation( mocLocationProvider, mockLocation);
+
+    }
+
+
+//    public class ActionReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//
+//            Toast.makeText(context,"Here it comes",Toast.LENGTH_LONG).show();
+//            String action=intent.getStringExtra("action");
+//            if(action.equals("actionStop")){
+//                performActionStop();
+//            }
+//
+//            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+//            context.sendBroadcast(it);
+//        }
+//
+//        public void performActionStop(){
+//
+//            flg=0;
+//            setCurrent();
+//            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+//            fab.setColorFilter(getResources().getColor(R.color.white));
+//        }
+
+
+
+
+
+
+
+//    public void setLocale(String lang) {
+//
+//        myLocale = new Locale(lang);
+//        Resources res = getResources();
+//        DisplayMetrics dm = res.getDisplayMetrics();
+//        Configuration conf = res.getConfiguration();
+//        conf.locale = myLocale;
+//        res.updateConfiguration(conf, dm);
+//        Intent refresh = new Intent(getContext(), NavigationActivity.class);
+//        startActivity(refresh);
+//    }
 }
 

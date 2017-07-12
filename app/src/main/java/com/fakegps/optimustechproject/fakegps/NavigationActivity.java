@@ -1,6 +1,8 @@
 package com.fakegps.optimustechproject.fakegps;
 
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,12 +27,26 @@ public class NavigationActivity extends AppCompatActivity
 
     Boolean doubleBackToExitPressedOnce=false;
     NavigationView navigationView;
+    NotificationManager nMN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        nMN = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        nMN.cancelAll();
+
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        try {
+            Log.d("tag" ,"Removing Test providers");
+            lm.removeTestProvider(LocationManager.GPS_PROVIDER);
+        } catch (IllegalArgumentException error) {
+            Log.d("tag","Got exception in removing test provider");
+        }
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, );
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
