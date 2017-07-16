@@ -22,12 +22,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Locale;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Boolean doubleBackToExitPressedOnce=false;
     NavigationView navigationView;
     NotificationManager nMN;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +42,13 @@ public class NavigationActivity extends AppCompatActivity
         nMN = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         nMN.cancelAll();
 
-        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-        try {
-            Log.d("tag" ,"Removing Test providers");
-            lm.removeTestProvider(LocationManager.GPS_PROVIDER);
-        } catch (IllegalArgumentException error) {
-            Log.d("tag","Got exception in removing test provider");
-        }
+//        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        try {
+//            Log.d("tag" ,"Removing Test providers");
+//            lm.removeTestProvider(LocationManager.GPS_PROVIDER);
+//        } catch (IllegalArgumentException error) {
+//            Log.d("tag","Got exception in removing test provider");
+//        }
         //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, );
 
 
@@ -89,11 +92,11 @@ public class NavigationActivity extends AppCompatActivity
             setTitle(getResources().getString(R.string.set_mock));
         }
         if(fragClassName.equals(fragment_history.class.getName())){
-            navigationView.getMenu().getItem(2).setChecked(true);
+            navigationView.getMenu().getItem(3).setChecked(true);
             setTitle(getResources().getString(R.string.history));
         }
         if(fragClassName.equals(fragment_favourites.class.getName())){
-            navigationView.getMenu().getItem(3).setChecked(true);
+            navigationView.getMenu().getItem(4).setChecked(true);
             setTitle(getResources().getString(R.string.fav));
         }
 
@@ -170,7 +173,11 @@ public class NavigationActivity extends AppCompatActivity
                 break;
             case R.id.map_type:
                 dialog_map_type dialog_map_type = new dialog_map_type();
-                dialog_map_type.show(getFragmentManager(),getResources().getString(R.string.go_to));
+                dialog_map_type.show(getFragmentManager(),getResources().getString(R.string.map_type));
+                break;
+            case R.id.change_language:
+                dialog_lang dialog_lang = new dialog_lang();
+                dialog_lang.show(getFragmentManager(),getResources().getString(R.string.change_language));
                 break;
             case R.id.instructions:
                 dialog_inst dialog_inst = new dialog_inst();

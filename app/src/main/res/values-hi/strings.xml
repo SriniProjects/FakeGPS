@@ -1,3 +1,93 @@
 <resources>
+    <string name="app_name">FakeGPS</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+
+    <string name="navigation_drawer_open">नेविगेशन ड्रॉवर खोलें</string>
+    <string name="navigation_drawer_close">नेविगेशन ड्रॉवर बंद करें</string>
+
+    <string name="action_settings">सेटिंग्स</string>
+    <string name="title_activity_maps">नक्शा</string>
+
+    <string name="search">अपना नया स्थान खोजें</string>
+    <string name="locate">पता लगाएँ</string>
+    <string name="latitude">अक्षांश</string>
+    <string name="longitude">देशान्तर</string>
+    <string name="go">चले जाओ</string>
+    <string name="go_to">के लिए जाओ</string>
+    <string name="change_language">भाषा बदलो</string>
+
+    <string name="hindi">हिंदी</string>
+    <string name="english">अंग्रेज़ी</string>
+
+    <string name="no_mock">कोई नकली स्थान सेट नहीं है</string>
+    <string name="no_loc">कोई स्थान सेट नहीं है</string>
+    <string name="no_fav">कोई पसंदीदा जोड़ा नहीं</string>
+    <string name="current_location">वर्तमान स्थान</string>
+
+    <string name="map_type">नक्शा प्रकार</string>
+    <string name="satellite">उपग्रह</string>
+    <string name="hybrid">संकर</string>
+    <string name="normal">साधारण</string>
+    <string name="terrain">इलाक़ा</string>
+    <string name="none">कोई नहीं</string>
+    <string name="set_type">प्रकार सेट करें</string>
+
+    <string name="toast_item_removed_from_fav">आइटम पसंदीदा से हटा दिया गया</string>
+    <string name="toast_enter_lat_lon">कृपया अक्षांश और देशांतर दर्ज करें</string>
+
+    <string name="locating">पता लगाने...</string>
+
+    <string name="check_internet">स्थान के बारे में पता नहीं</string>
+    <string name="marker_title">मार्कर शीर्षक</string>
+    <string name="marker_description">मार्कर विवरण</string>
+
+    <string name="new_mock">नया नकली स्थान</string>
+    <string name="loc_set">स्थान सफलतापूर्वक सेट किया गया</string>
+
+    <string name="added_to_fav">पसंदीदा में स्थान जोड़ा गया</string>
+    <string name="check_internet2">स्थान के बारे में पता नहीं</string>
+
+    <string name="check_new_loc">Hey check out my new location</string>
+    <string name="no_loc_provider">कोई स्थान प्रदाता नहीं मिला!</string>
+
+    <string name="denied_per">ओह, आपने अनुमति से इनकार कर दिया</string>
+    <string name="cancel">रद्द करना</string>
+    <string name="gps_settings">जीपीएस सेटिंग्स</string>
+    <string name="enable_gps">जीपीएस सक्षम नहीं है क्या आप सेटिंग मेनू पर जाना चाहते हैं?</string>
+    <string name="settings">सेटिंग्स</string>
+
+    <string name="set_mock">नकली स्थान सेट करें</string>
+    <string name="history">इतिहास</string>
+    <string name="fav">पसंदीदा</string>
+
+    <string name="once_again">बाहर निकलने के लिए एक बार फिर से प्रेस करें</string>
+    <string name="change_map_type">मानचित्र प्रकार बदलें</string>
+    <string name="about_us">हमारे बारे में</string>
+    <string name="faq">पूछे जाने वाले प्रश्न</string>
+    <string name="inst">अनुदेश</string>
+    <string name="close">बंद करे</string>
+
+    <string name="set_this_loc">मेरे स्थान के रूप में सेट करें</string>
+
+    <string name="map_inst">मानचित्र पर क्लिक करें या किसी भी स्थान को देखने और बाद में सेट करने के लिए खोज बार में टाइप करें</string>
+    <string name="def_loc_inst">जब भी आप मानचित्र में फंस रहे हैं, डिफ़ॉल्ट पर जाने के लिए अपने स्थान आइकन पर क्लिक करें</string>
+    <string name="inst_allow_per">ऐप में सभी अनुमतियों की अनुमति दें</string>
+    <string name="allow_mock">डेवलपर विकल्पों से नकली स्थान सेट करें</string>
+    <string name="navigate_map">मानचित्र पर नेविगेट करें</string>
+    <string name="set_loc">नकली स्थान सेट करने के लिए प्ले बटन दबाएं</string>
+    <string name="search_place">खोज पट्टी से अपनी जगह खोजें</string>
+    <string name="navigate_his">अपने पिछले सेट स्थानों को देखने के लिए इतिहास विकल्प पर नेविगेट करें</string>
+    <string name="navigate_fav">अपने पसंदीदा स्थानों को देखने के लिए इतिहास विकल्प पर नेविगेट करें</string>
+    <string name="set_fav">पसंदीदा स्थान में पसंदीदा को जोड़ने के लिए स्टार बटन दबाएं</string>
+    <string name="share">अपने वर्तमान स्थान को साझा करने के लिए शेयर बटन दबाएं</string>
+    <string name="go_to_op">किसी भी अक्षांश और देशांतर के लिए स्थान सेट करने के लिए विकल्प पर जाएं पर जाएँ</string>
+    <string name="change_map">दिखाए गए नक्शे के प्रकार को बदलने के लिए मानचित्र प्रकार विकल्प बदलने के लिए नेविगेट करें</string>
+
+
+
+
+
+
+
 
 </resources>

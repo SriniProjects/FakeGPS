@@ -91,6 +91,8 @@ public class fragmet_location extends Fragment {
     NotificationManager nMN;
     Locale myLocale;
     Button set;
+    String curr_lang;
+    TextView txt_curr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -102,6 +104,8 @@ public class fragmet_location extends Fragment {
         share=(ImageView)parentView.findViewById(R.id.share);
         location=(TextView)parentView.findViewById(R.id.location);
         search_ll=(LinearLayout)getActivity().findViewById(R.id.search_ll);
+
+        txt_curr=(TextView)parentView.findViewById(R.id.txt_curr);
 
         set=(Button)parentView.findViewById(R.id.btn_set_loc);
         progress=new ProgressDialog(getContext());
@@ -126,6 +130,18 @@ public class fragmet_location extends Fragment {
             e.printStackTrace();
         }
 
+        if(DbHandler.contains(getActivity(),"language")){
+            curr_lang=DbHandler.getString(getActivity(),"language","");
+        }
+        else{
+            curr_lang="english";
+            DbHandler.putString(getActivity(),"language","english");
+        }
+
+        txt_curr.setText(getResources().getString(R.string.current_location));
+       // changeLang(curr_lang);
+
+
         if(DbHandler.contains(getActivity(),"map_type")){
             map_type=DbHandler.getString(getActivity(),"map_type","");
         }
@@ -148,6 +164,10 @@ public class fragmet_location extends Fragment {
             co="";
             location.setText(l[2]);
             Log.e("loc",String.valueOf(l));
+
+            Toast.makeText(getActivity(),String.valueOf(lati)+"2",Toast.LENGTH_SHORT).show();
+            setMarker();
+
         }
 
         else if(DbHandler.contains(getActivity(),"go_to_specific")){
@@ -160,6 +180,8 @@ public class fragmet_location extends Fragment {
             la=lati;
             lo=longi;
 
+            Toast.makeText(getActivity(),String.valueOf(lati)+"3",Toast.LENGTH_SHORT).show();
+            setMarker();
 
         }
         else {
@@ -180,17 +202,44 @@ public class fragmet_location extends Fragment {
                         ci=addresses.get(0).getLocality();
                         co=addresses.get(0).getCountryName();
 
+                        Toast.makeText(getActivity(),String.valueOf(lati)+"1",Toast.LENGTH_SHORT).show();
+
+
                         location.setText(addresses.get(0).getLocality() + " " + addresses.get(0).getCountryName() + "\n" + String.valueOf(lati) + " " + String.valueOf(longi));
-
+                        setMarker();
                     } else {
+                        location.setText("");
+                        lati=gpsTracker.getLatitude();
+                        longi=gpsTracker.getLongitude();
 
+                        la=lati;
+                        lo=longi;
+
+                        curr_lati = lati;
+                        curr_longi = longi;
+
+                        Toast.makeText(getActivity(),String.valueOf(lati)+"5",Toast.LENGTH_SHORT).show();
+                        setMarker();
                     }
 
                 } catch (Exception e) {
                     location.setText("");
+                    lati=gpsTracker.getLatitude();
+                    longi=gpsTracker.getLongitude();
+
+                    la=lati;
+                    lo=longi;
+
+                    curr_lati = lati;
+                    curr_longi = longi;
+
+                    Toast.makeText(getActivity(),String.valueOf(lati)+"4",Toast.LENGTH_SHORT).show();
+                    setMarker();
+
                     e.printStackTrace();
 
                 }
+
             } else {
                 progress.dismiss();
 
@@ -198,109 +247,6 @@ public class fragmet_location extends Fragment {
             }
         }
 
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                    return;
-                }
-                googleMap.setMyLocationEnabled(true);
-
-                LatLng loc = new LatLng(lati,longi);
-
-                if(map_type.equals("normal")) {
-                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                }
-                if(map_type.equals("terrain")) {
-                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                }
-                if(map_type.equals("satellite")) {
-                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                }
-                if(map_type.equals("hybrid")) {
-                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                }
-                if(map_type.equals("none")) {
-                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-                }
-
-                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
-
-                List<Address> addresses2;
-                try {
-                    addresses2 = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
-                    if (addresses2.size() != 0) {
-                        ci=addresses2.get(0).getLocality();
-                        co=addresses2.get(0).getCountryName();
-                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " " + String.valueOf(longi));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
-
-                }
-
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(LatLng latLng) {
-                        googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
-
-                        lati=latLng.latitude;
-                        longi=latLng.longitude;
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
-                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                        List<Address> addresses;
-                        try {
-                            addresses = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
-                            if (addresses.size() != 0) {
-                                location.setText(addresses.get(0).getLocality()+" "+addresses.get(0).getCountryName()+"\n"+String.valueOf(lati)+" "+String.valueOf(longi));
-
-                                ci=addresses.get(0).getLocality();
-                                co=addresses.get(0).getCountryName();
-                                la=lati;
-                                lo=longi;
-
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            location.setText("");
-                            Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
-                        }
-
-
-                    }
-                });
-                googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                    @Override
-                    public void onMarkerDragStart(Marker marker) {
-
-                    }
-
-                    @Override
-                    public void onMarkerDrag(Marker marker) {
-
-                    }
-
-                    @Override
-                    public void onMarkerDragEnd(Marker marker) {
-                        lati=marker.getPosition().latitude;
-                        longi=marker.getPosition().longitude;
-
-
-                    }
-                });
-
-            }
-        });
 
         set.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,7 +297,7 @@ public class fragmet_location extends Fragment {
                     nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
                     noti = new Notification.Builder(getContext())
                             .setContentTitle(getResources().getString(R.string.new_mock))
-                            .setContentText(ci+" ,"+co+"\n"+la+","+lo)
+                            .setContentText(ci+" ,"+co+"\n"+la+" , "+lo)
                             .setSmallIcon(R.drawable.ic_map_black_24dp)
                             .setAutoCancel(true)
                             .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
@@ -452,7 +398,7 @@ public class fragmet_location extends Fragment {
                     flg=0;
                     nMN.cancelAll();
                     setCurrent();
-                    Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
                     fab.setColorFilter(getResources().getColor(R.color.white));
                 }
@@ -500,7 +446,7 @@ public class fragmet_location extends Fragment {
                     add_to_fav.setColorFilter(getResources().getColor(R.color.white));
                 }
                 else{
-                    Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_loc), Toast.LENGTH_SHORT).show();
                 }
                // setLocale("hi");
             }
@@ -516,7 +462,7 @@ public class fragmet_location extends Fragment {
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT,
-                            getResources().getString(R.string.check_new_loc)+" \n"+location.getText().toString());
+                            "http://maps.google.com/?q="+String.valueOf(lati)+","+String.valueOf(longi));
                     sendIntent.setType("text/plain");
                     startActivity(sendIntent);
                 }
@@ -544,12 +490,125 @@ public class fragmet_location extends Fragment {
         return parentView;
     }
 
+    public void setMarker(){
+
+        final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
+        final GPSTracker gpsTracker=new GPSTracker(getContext());
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+
+                LatLng loc = new LatLng(lati,longi);
+
+                if(map_type.equals("normal")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+                if(map_type.equals("terrain")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }
+                if(map_type.equals("satellite")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }
+                if(map_type.equals("hybrid")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+                if(map_type.equals("none")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                }
+
+                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+
+                List<Address> addresses2;
+                try {
+                    addresses2 = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
+                    if (addresses2.size() != 0) {
+                        ci=addresses2.get(0).getLocality();
+                        co=addresses2.get(0).getCountryName();
+                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " , " + String.valueOf(longi));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
+
+                }
+
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        googleMap.clear();
+                        googleMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+
+                        lati=latLng.latitude;
+                        longi=latLng.longitude;
+
+                        la=lati;
+                        lo=longi;
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                        List<Address> addresses;
+                        try {
+                            addresses = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
+                            if (addresses.size() != 0) {
+                                location.setText(addresses.get(0).getLocality()+" "+addresses.get(0).getCountryName()+"\n"+String.valueOf(lati)+" , "+String.valueOf(longi));
+
+                                ci=addresses.get(0).getLocality();
+                                co=addresses.get(0).getCountryName();
+                                la=lati;
+                                lo=longi;
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            location.setText(String.valueOf(lati)+" , "+String.valueOf(longi));
+                            Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+                googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                    @Override
+                    public void onMarkerDragStart(Marker marker) {
+
+                    }
+
+                    @Override
+                    public void onMarkerDrag(Marker marker) {
+
+                    }
+
+                    @Override
+                    public void onMarkerDragEnd(Marker marker) {
+                        lati=marker.getPosition().latitude;
+                        longi=marker.getPosition().longitude;
+
+
+                    }
+                });
+
+            }
+        });
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                Toast.makeText(getContext(),String.valueOf(place.getName())+String.valueOf(place.getLatLng().latitude)+String.valueOf(place.getLatLng().longitude),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),String.valueOf(place.getName())+"\n"+String.valueOf(place.getLatLng().latitude)+" , "+String.valueOf(place.getLatLng().longitude),Toast.LENGTH_LONG).show();
                 LatLng l=place.getLatLng();
 
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
@@ -625,62 +684,62 @@ public class fragmet_location extends Fragment {
     }
 
     private void setCurrent(){
-        LocationManager lm = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy( Criteria.ACCURACY_FINE );
 
-        String mocLocationProvider = LocationManager.GPS_PROVIDER;//lm.getBestProvider( criteria, true );
+        final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
 
-        if ( mocLocationProvider == null ) {
-            Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        lm.addTestProvider(mocLocationProvider, false, false,
-                false, false, true, true, true, 0, 5);
-        lm.setTestProviderEnabled(mocLocationProvider, true);
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
 
-        Location loc = new Location(mocLocationProvider);
-        Location mockLocation = new Location(mocLocationProvider); // a string
-        mockLocation.setLatitude(curr_lati);  // double
-        mockLocation.setLongitude(curr_longi);
-        mockLocation.setAltitude(loc.getAltitude());
-        mockLocation.setTime(System.currentTimeMillis());
-        mockLocation.setAccuracy(1);
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-        }
-        lm.setTestProviderLocation( mocLocationProvider, mockLocation);
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
 
+                googleMap.clear();
+
+                LatLng loc = new LatLng(lati,longi);
+
+                if(map_type.equals("normal")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+                if(map_type.equals("terrain")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }
+                if(map_type.equals("satellite")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }
+                if(map_type.equals("hybrid")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+                if(map_type.equals("none")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                }
+
+                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+
+                List<Address> addresses2;
+                try {
+                    addresses2 = geocoder.getFromLocation(Double.valueOf(curr_lati), Double.valueOf(curr_longi), 1);
+                    if (addresses2.size() != 0) {
+                        ci=addresses2.get(0).getLocality();
+                        co=addresses2.get(0).getCountryName();
+                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " , " + String.valueOf(longi));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
+
+                }
+
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            }
+        });
     }
-
-
-//    public class ActionReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//
-//            Toast.makeText(context,"Here it comes",Toast.LENGTH_LONG).show();
-//            String action=intent.getStringExtra("action");
-//            if(action.equals("actionStop")){
-//                performActionStop();
-//            }
-//
-//            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-//            context.sendBroadcast(it);
-//        }
-//
-//        public void performActionStop(){
-//
-//            flg=0;
-//            setCurrent();
-//            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
-//            fab.setColorFilter(getResources().getColor(R.color.white));
-//        }
-
-
-
-
 
 
 

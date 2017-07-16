@@ -39,6 +39,7 @@
                             android:text="Current Location"
                             android:textColor="@color/white"
                             android:textSize="18dp"
+                            android:id="@+id/txt_curr"
                             android:layout_margin="5dp"
                             android:textStyle="bold|italic"/>
                         <LinearLayout
@@ -91,7 +92,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Set this as my location"
+                        android:text="@string/set_this_loc"
                         android:textColor="@color/white"
                         android:id="@+id/btn_set_loc"
                         android:background="#2d5d82"/>

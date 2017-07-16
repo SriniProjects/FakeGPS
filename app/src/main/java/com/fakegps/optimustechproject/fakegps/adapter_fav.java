@@ -40,8 +40,8 @@ public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
     public void onBindViewHolder(final view_holder holder, int position) {
         holder.setIsRecyclable(false);
 
-        holder.place.setText(fav.getCity().get(position)+" ,"+fav.getCountry().get(position));
-        holder.lati.setText(fav.getLatitude().get(position)+" ,"+fav.getLongitude().get(position));
+        holder.place.setText(fav.getCity().get(position)+" , "+fav.getCountry().get(position));
+        holder.lati.setText(fav.getLatitude().get(position)+" , "+fav.getLongitude().get(position));
 
     }
 
