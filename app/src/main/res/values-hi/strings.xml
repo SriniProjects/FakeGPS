@@ -19,6 +19,9 @@
     <string name="hindi">हिंदी</string>
     <string name="english">अंग्रेज़ी</string>
 
+    <string name="start">प्रारंभ</string>
+    <string name="stop">रुकें</string>
+
     <string name="no_mock">कोई नकली स्थान सेट नहीं है</string>
     <string name="no_loc">कोई स्थान सेट नहीं है</string>
     <string name="no_fav">कोई पसंदीदा जोड़ा नहीं</string>

@@ -16,8 +16,11 @@
     <string name="go_to">Go To</string>
     <string name="change_language">Change language</string>
 
-    <string name="hindi">Hindi</string>
+    <string name="persian">Persian</string>
     <string name="english">English</string>
+
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
 
     <string name="no_mock">No mock location set</string>
     <string name="no_loc">No location set</string>
@@ -36,6 +39,8 @@
     <string name="toast_enter_lat_lon">Please enter latitude and longitude</string>
 
     <string name="locating">Locating...</string>
+
+    <string name="share_txt">Share</string>
 
     <string name="check_internet">Can\'t get location details</string>
     <string name="marker_title">Marker Title</string>
@@ -82,6 +87,10 @@
     <string name="share">Press share button to share your current location</string>
     <string name="go_to_op">Navigate to Go To option to set location to any latitude and longitude</string>
     <string name="change_map">Navigate to Change map type option to change type of map shown</string>
+
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>

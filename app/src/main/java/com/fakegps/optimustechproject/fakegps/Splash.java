@@ -1,4 +1,5 @@
 package com.fakegps.optimustechproject.fakegps;
+
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import android.widget.LinearLayout;
 import java.util.Locale;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class Splash extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 3000;
     protected boolean _active = true;
@@ -49,28 +50,28 @@ public class SplashActivity extends AppCompatActivity {
                 } catch (Exception e) {
 
                 } finally {
-                    if(DbHandler.contains(SplashActivity.this,"language")){
-                        curr_lang=DbHandler.getString(SplashActivity.this,"language","");
+                    if(DbHandler.contains(Splash.this,"language")){
+                        curr_lang=DbHandler.getString(Splash.this,"language","");
                     }
                     else{
                         curr_lang="english";
-                        DbHandler.putString(SplashActivity.this,"language","english");
+                        DbHandler.putString(Splash.this,"language","english");
                     }
 
                     if (curr_lang.equals("english")) {
                         changeLang("en");
                     }
                     else {
-                        changeLang("hi");
+                        changeLang("fa");
                     }
 
-                    if(DbHandler.getBoolean(SplashActivity.this,"isLoggedIn",false)){
-                        Intent intent = new Intent(SplashActivity.this,NavigationActivity.class);
+                    if(DbHandler.getBoolean(Splash.this,"isLoggedIn",false)){
+                        Intent intent = new Intent(Splash.this,NavigationActivity.class);
                         startActivity(intent);
                         finish();
                     }
                     else {
-                        Intent intent = new Intent(SplashActivity.this, NavigationActivity.class);
+                        Intent intent = new Intent(Splash.this, NavigationActivity.class);
                         startActivity(intent);
                         finish();
                     }

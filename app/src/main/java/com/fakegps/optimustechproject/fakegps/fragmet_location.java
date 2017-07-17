@@ -2,12 +2,14 @@ package com.fakegps.optimustechproject.fakegps;
 
 import android.Manifest;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -17,9 +19,11 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.audiofx.BassBoost;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -90,9 +94,9 @@ public class fragmet_location extends Fragment {
     Notification noti;
     NotificationManager nMN;
     Locale myLocale;
-    Button set;
     String curr_lang;
     TextView txt_curr;
+    Button start,stop;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -107,7 +111,9 @@ public class fragmet_location extends Fragment {
 
         txt_curr=(TextView)parentView.findViewById(R.id.txt_curr);
 
-        set=(Button)parentView.findViewById(R.id.btn_set_loc);
+        start=(Button)parentView.findViewById(R.id.btn_start);
+        stop=(Button)parentView.findViewById(R.id.btn_stop);
+
         progress=new ProgressDialog(getContext());
         progress.setMessage(getResources().getString(R.string.locating));
         progress.setCancelable(false);
@@ -165,7 +171,6 @@ public class fragmet_location extends Fragment {
             location.setText(l[2]);
             Log.e("loc",String.valueOf(l));
 
-            Toast.makeText(getActivity(),String.valueOf(lati)+"2",Toast.LENGTH_SHORT).show();
             setMarker();
 
         }
@@ -180,11 +185,48 @@ public class fragmet_location extends Fragment {
             la=lati;
             lo=longi;
 
-            Toast.makeText(getActivity(),String.valueOf(lati)+"3",Toast.LENGTH_SHORT).show();
             setMarker();
 
         }
         else {
+
+            LocationManager lm = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+            boolean gps_enabled = false;
+            boolean network_enabled = false;
+
+            try {
+                gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch(Exception ex) {}
+
+            try {
+                network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch(Exception ex) {}
+
+            if(!gps_enabled && !network_enabled) {
+                // notify user
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setMessage(getContext().getResources().getString(R.string.enable_gps));
+                dialog.setPositiveButton(getContext().getResources().getString(R.string.settings), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        // TODO Auto-generated method stub
+                        Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(myIntent);
+                        //get gps
+                    }
+                });
+                dialog.setNegativeButton(getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+                dialog.show();
+            }
+
+
             if (gpsTracker.canGetLocation()) {
                 progress.dismiss();
                 List<Address> addresses;
@@ -202,9 +244,6 @@ public class fragmet_location extends Fragment {
                         ci=addresses.get(0).getLocality();
                         co=addresses.get(0).getCountryName();
 
-                        Toast.makeText(getActivity(),String.valueOf(lati)+"1",Toast.LENGTH_SHORT).show();
-
-
                         location.setText(addresses.get(0).getLocality() + " " + addresses.get(0).getCountryName() + "\n" + String.valueOf(lati) + " " + String.valueOf(longi));
                         setMarker();
                     } else {
@@ -218,7 +257,6 @@ public class fragmet_location extends Fragment {
                         curr_lati = lati;
                         curr_longi = longi;
 
-                        Toast.makeText(getActivity(),String.valueOf(lati)+"5",Toast.LENGTH_SHORT).show();
                         setMarker();
                     }
 
@@ -233,7 +271,6 @@ public class fragmet_location extends Fragment {
                     curr_lati = lati;
                     curr_longi = longi;
 
-                    Toast.makeText(getActivity(),String.valueOf(lati)+"4",Toast.LENGTH_SHORT).show();
                     setMarker();
 
                     e.printStackTrace();
@@ -248,78 +285,101 @@ public class fragmet_location extends Fragment {
         }
 
 
-        set.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Log.e("history",DbHandler.getString(getContext(),"history","{}"));
-                if(flg==0) {
-                    flg=1;
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_black_24dp));
-                    fab.setColorFilter(getResources().getColor(R.color.white));
-                    setMock();
+                if (flg == 0) {
+                    if(Settings.Secure.getInt(getActivity().getContentResolver(),Settings.Secure.ALLOW_MOCK_LOCATION,11)==1) {
 
-                    if(DbHandler.contains(getContext(),"history")){
-                        history=gson.fromJson(DbHandler.getString(getContext(),"history","{}"),History.class);
-                        latitude=history.getLatitude();
-                        longitude=history.getLongitude();
-                        city=history.getCity();
-                        country=history.getCountry();
+                        flg = 1;
+                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_black_24dp));
+                        fab.setColorFilter(getResources().getColor(R.color.white));
 
-                        latitude.add(la);
-                        longitude.add(lo);
-                        city.add(ci);
-                        country.add(co);
 
-                        History his=new History(latitude,longitude,city,country);
+                            setMock();
 
-                        DbHandler.putString(getContext(),"history",gson.toJson(his));
+                            if (DbHandler.contains(getContext(), "history")) {
+                                history = gson.fromJson(DbHandler.getString(getContext(), "history", "{}"), History.class);
+                                latitude = history.getLatitude();
+                                longitude = history.getLongitude();
+                                city = history.getCity();
+                                country = history.getCountry();
 
+                                latitude.add(la);
+                                longitude.add(lo);
+                                city.add(ci);
+                                country.add(co);
+
+                                History his = new History(latitude, longitude, city, country);
+
+                                DbHandler.putString(getContext(), "history", gson.toJson(his));
+
+                            } else {
+
+                                latitude.add(la);
+                                longitude.add(lo);
+                                city.add(ci);
+                                country.add(co);
+
+                                History his = new History(latitude, longitude, city, country);
+
+                                DbHandler.putString(getContext(), "history", gson.toJson(his));
+
+                            }
+
+                            Intent intentAction = new Intent(getContext(), NavigationActivity.class);
+                            intentAction.putExtra("action", "actionStop");
+                            PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                            nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+                            noti = new Notification.Builder(getContext())
+                                    .setContentTitle(getResources().getString(R.string.new_mock))
+                                    .setContentText(ci + " ," + co + "\n" + la + "," + lo)
+                                    .setSmallIcon(R.drawable.ic_map_black_24dp)
+                                    .setAutoCancel(true)
+                                    .addAction(R.drawable.ic_stop_black_24dp, "Stop", pIntent)
+                                    .setOngoing(true)
+                                    .build();
+
+                            noti.flags = Notification.FLAG_NO_CLEAR;
+                            nMN.notify(0, noti);
+
+
+                            Toast.makeText(getContext(), getResources().getString(R.string.loc_set), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+                            intent.addCategory(Intent.CATEGORY_HOME);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                     }
-                    else{
+                    else {
+                        new AlertDialog.Builder(getContext()).setMessage("Please enable mock location from developer options")
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                        latitude.add(la);
-                        longitude.add(lo);
-                        city.add(ci);
-                        country.add(co);
-
-                        History his=new History(latitude,longitude,city,country);
-
-                        DbHandler.putString(getContext(),"history",gson.toJson(his));
-
+                                    }
+                                }).setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+                            }
+                        }).create().show();
                     }
 
-                    Intent intentAction = new Intent(getContext(),NavigationActivity.class);
-                    intentAction.putExtra("action","actionStop");
-                    PendingIntent pIntent = PendingIntent.getActivity(getContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-                    nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
-                    noti = new Notification.Builder(getContext())
-                            .setContentTitle(getResources().getString(R.string.new_mock))
-                            .setContentText(ci+" ,"+co+"\n"+la+" , "+lo)
-                            .setSmallIcon(R.drawable.ic_map_black_24dp)
-                            .setAutoCancel(true)
-                            .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
-                            .setOngoing(true)
-                            .build();
-
-                    noti.flags = Notification.FLAG_NO_CLEAR;
-                    nMN.notify(0, noti);
-
-
-
-                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet2),Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
                 }
-                else{
-                    flg=0;
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(flg==1) {
+                    flg = 0;
                     nMN.cancelAll();
                     setCurrent();
-                    Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
                     fab.setColorFilter(getResources().getColor(R.color.white));
                 }
@@ -333,66 +393,83 @@ public class fragmet_location extends Fragment {
 
                 Log.e("history",DbHandler.getString(getContext(),"history","{}"));
                 if(flg==0) {
-                    flg=1;
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_black_24dp));
-                    fab.setColorFilter(getResources().getColor(R.color.white));
-                    setMock();
+                    if(Settings.Secure.getInt(getActivity().getContentResolver(),Settings.Secure.ALLOW_MOCK_LOCATION,11)==1) {
 
-                    if(DbHandler.contains(getContext(),"history")){
-                        history=gson.fromJson(DbHandler.getString(getContext(),"history","{}"),History.class);
-                        latitude=history.getLatitude();
-                        longitude=history.getLongitude();
-                        city=history.getCity();
-                        country=history.getCountry();
+                        flg=1;
+                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_black_24dp));
+                        fab.setColorFilter(getResources().getColor(R.color.white));
+                        setMock();
 
-                        latitude.add(la);
-                        longitude.add(lo);
-                        city.add(ci);
-                        country.add(co);
+                        if(DbHandler.contains(getContext(),"history")){
+                            history=gson.fromJson(DbHandler.getString(getContext(),"history","{}"),History.class);
+                            latitude=history.getLatitude();
+                            longitude=history.getLongitude();
+                            city=history.getCity();
+                            country=history.getCountry();
 
-                        History his=new History(latitude,longitude,city,country);
+                            latitude.add(la);
+                            longitude.add(lo);
+                            city.add(ci);
+                            country.add(co);
 
-                        DbHandler.putString(getContext(),"history",gson.toJson(his));
+                            History his=new History(latitude,longitude,city,country);
 
+                            DbHandler.putString(getContext(),"history",gson.toJson(his));
+
+                        }
+                        else{
+
+                            latitude.add(la);
+                            longitude.add(lo);
+                            city.add(ci);
+                            country.add(co);
+
+                            History his=new History(latitude,longitude,city,country);
+
+                            DbHandler.putString(getContext(),"history",gson.toJson(his));
+
+                        }
+
+                        Intent intentAction = new Intent(getContext(),NavigationActivity.class);
+                        intentAction.putExtra("action","actionStop");
+                        PendingIntent pIntent = PendingIntent.getActivity(getContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                        nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+                        noti = new Notification.Builder(getContext())
+                                .setContentTitle(getResources().getString(R.string.new_mock))
+                                .setContentText(ci+" ,"+co+"\n"+la+","+lo)
+                                .setSmallIcon(R.drawable.logo)
+                                .setAutoCancel(true)
+                                .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
+                                .setOngoing(true)
+                                .build();
+
+                        noti.flags = Notification.FLAG_NO_CLEAR;
+                        nMN.notify(0, noti);
+
+
+
+                        Toast.makeText(getContext(),getResources().getString(R.string.loc_set),Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     }
-                    else{
+                    else {
+                        new AlertDialog.Builder(getContext()).setMessage("Please enable mock location from developer options")
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                        latitude.add(la);
-                        longitude.add(lo);
-                        city.add(ci);
-                        country.add(co);
-
-                        History his=new History(latitude,longitude,city,country);
-
-                        DbHandler.putString(getContext(),"history",gson.toJson(his));
-
+                                    }
+                                }).setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+                            }
+                        }).create().show();
                     }
-
-                    Intent intentAction = new Intent(getContext(),NavigationActivity.class);
-                    intentAction.putExtra("action","actionStop");
-                    PendingIntent pIntent = PendingIntent.getActivity(getContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-                    nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
-                    noti = new Notification.Builder(getContext())
-                            .setContentTitle(getResources().getString(R.string.new_mock))
-                            .setContentText(ci+" ,"+co+"\n"+la+","+lo)
-                            .setSmallIcon(R.drawable.ic_map_black_24dp)
-                            .setAutoCancel(true)
-                            .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
-                            .setOngoing(true)
-                            .build();
-
-                    noti.flags = Notification.FLAG_NO_CLEAR;
-                    nMN.notify(0, noti);
-
-
-
-                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet2),Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
                 }
                 else{
                     flg=0;
@@ -439,6 +516,7 @@ public class fragmet_location extends Fragment {
                         DbHandler.putString(getContext(), "favourites", gson.toJson(fav));
 
                     }
+
 
 
                     Toast.makeText(getContext(), getResources().getString(R.string.added_to_fav), Toast.LENGTH_SHORT).show();
@@ -505,6 +583,7 @@ public class fragmet_location extends Fragment {
                     return;
                 }
                 googleMap.setMyLocationEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
 
                 LatLng loc = new LatLng(lati,longi);
 
@@ -660,26 +739,29 @@ public class fragmet_location extends Fragment {
 
         String mocLocationProvider = LocationManager.GPS_PROVIDER;//lm.getBestProvider( criteria, true );
 
-        if ( mocLocationProvider == null ) {
-            Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        lm.addTestProvider(mocLocationProvider, false, false,
-                false, false, true, true, true, 0, 5);
-        lm.setTestProviderEnabled(mocLocationProvider, true);
+            if (mocLocationProvider == null) {
+                Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            lm.addTestProvider(mocLocationProvider, false, false,
+                    false, false, true, true, true, 0, 5);
+            lm.setTestProviderEnabled(mocLocationProvider, true);
 
-        Location loc = new Location(mocLocationProvider);
-        Location mockLocation = new Location(mocLocationProvider); // a string
-        mockLocation.setLatitude(lati);  // double
-        mockLocation.setLongitude(longi);
-        mockLocation.setAltitude(loc.getAltitude());
-        mockLocation.setTime(System.currentTimeMillis());
-        mockLocation.setAccuracy(1);
+            Location loc = new Location(mocLocationProvider);
+            Location mockLocation = new Location(mocLocationProvider); // a string
+            mockLocation.setLatitude(lati);  // double
+            mockLocation.setLongitude(longi);
+            mockLocation.setAltitude(loc.getAltitude());
+            mockLocation.setTime(System.currentTimeMillis());
+            mockLocation.setAccuracy(1);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-        }
-        lm.setTestProviderLocation( mocLocationProvider, mockLocation);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+            }
+            lm.setTestProviderLocation(mocLocationProvider, mockLocation);
+
+
+
 
     }
 

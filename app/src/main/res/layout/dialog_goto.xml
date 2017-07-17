@@ -2,30 +2,64 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:layout_marginBottom="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/go_to"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="22sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:background="#ccc"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp">
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/latitude"
         android:inputType="numberDecimal"
         android:id="@+id/lati_et"/>
+    </android.support.design.widget.TextInputLayout>
 
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/longitude"
         android:inputType="numberDecimal"
         android:id="@+id/longi_et"/>
-
+    </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/go"
-        android:layout_marginTop="10dp"
         android:id="@+id/go_to"
+        android:textSize="16dp"
+        android:textStyle="italic"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="#2d5d82"
         android:textColor="@color/white"/>
 

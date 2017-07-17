@@ -35,7 +35,7 @@ public class dialog_lang extends DialogFragment {
 
         radioGroup=(RadioGroup)view.findViewById(R.id.radio_group);
         btn1=(RadioButton)view.findViewById(R.id.english);
-        btn2=(RadioButton)view.findViewById(R.id.hindi);
+        btn2=(RadioButton)view.findViewById(R.id.persian);
 
         set=(Button)view.findViewById(R.id.set);
 
@@ -45,7 +45,7 @@ public class dialog_lang extends DialogFragment {
         if(lang.equals("english")){
             btn1.setChecked(true);
         }
-        if(lang.equals("hindi")){
+        if(lang.equals("persian")){
             btn2.setChecked(true);
         }
 
@@ -62,7 +62,7 @@ public class dialog_lang extends DialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    DbHandler.putString(getActivity(), "language", "hindi");
+                    DbHandler.putString(getActivity(), "language", "persian");
                 }
             }
         });
@@ -74,7 +74,7 @@ public class dialog_lang extends DialogFragment {
                     changeLang("en");
                 }
                 else{
-                    changeLang("hi");
+                    changeLang("fa");
                 }
 
             }
