@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -21,6 +23,7 @@ public class Splash extends AppCompatActivity {
     ImageView iv;
     String curr_lang;
     Locale myLocale;
+    Button close;
 
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -32,6 +35,9 @@ public class Splash extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        close=(Button) findViewById(R.id.close);
+        close.setVisibility(View.GONE);
         StartAnimations();
     }
     private void StartAnimations() {

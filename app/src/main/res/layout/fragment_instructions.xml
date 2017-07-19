@@ -11,14 +11,17 @@
         android:gravity="center"
         android:text="@string/inst"
         android:textStyle="bold"
+        android:textColor="#000"
         android:textSize="18dp"
         android:layout_marginTop="10dp" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/colorAccent"/>
+        android:background="#ccc"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,12 +29,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
@@ -44,15 +49,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
+                android:textColor="#000"
                 android:textSize="16dp"
                 android:text="@string/map_inst"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -65,14 +76,19 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/def_loc_inst"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -85,14 +101,21 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/inst_allow_per"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:textColor="#000"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -105,14 +128,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/allow_mock"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -125,14 +154,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/navigate_map"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -145,14 +180,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/set_loc"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -165,14 +206,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/search_place"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -185,14 +232,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/go_to_op"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -205,14 +258,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/set_fav"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -225,14 +284,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/navigate_his"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -245,14 +310,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/navigate_fav"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -265,34 +336,20 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/inst_allow_per"/>
         </LinearLayout>
 
-        <LinearLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fiber_manual_record_black_18dp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:textSize="16dp"
-                android:text="@string/change_map_type"/>
-        </LinearLayout>
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -305,6 +362,33 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16dp"
+                android:textColor="#000"
+                android:text="@string/change_map_type"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ccc"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_fiber_manual_record_black_18dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:textSize="16dp"
+                android:textColor="#000"
                 android:text="@string/share"/>
         </LinearLayout>
     </LinearLayout>
@@ -313,16 +397,19 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/colorAccent"/>
+        android:background="#ccc"/>
 
     <Button
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:id="@+id/close"
         android:textColor="@color/white"
-        android:background="#2d5d82"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="10dp"
         android:textStyle="bold|italic"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"

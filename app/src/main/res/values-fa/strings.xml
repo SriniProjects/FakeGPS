@@ -13,7 +13,7 @@
     <string name="latitude">"عرض جغرافیایی"</string>
     <string name="longitude">"طول جغرافیایی"</string>
     <string name="go">"برو"</string>
-    <string name="go_to">"Go To"</string>
+    <string name="go_to">"برو به"</string>
     <string name="change_language">"تغییر زبان"</string>
 
     <string name="persian">"پارسی"</string>

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:id="@+id/ll"
-    android:background="#01bcd5"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
     <ImageView
@@ -14,9 +14,11 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/logo"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="app logo"
         android:layout_gravity="center"
         />
-
+    <include layout="@layout/fragment_instructions"/>
 
 </LinearLayout>

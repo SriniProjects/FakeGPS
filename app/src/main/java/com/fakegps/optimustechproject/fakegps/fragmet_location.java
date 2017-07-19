@@ -73,7 +73,7 @@ public class fragmet_location extends Fragment {
     MapView mMapView;
     private GoogleMap googleMap;
     View parentView;
-    ImageView add_to_fav,share;
+    ImageView add_to_fav;
     ProgressDialog progress;
     Double lati=21.0,longi=78.0,curr_lati=21.0,curr_longi=78.0;
     FloatingActionButton fab;
@@ -96,7 +96,7 @@ public class fragmet_location extends Fragment {
     Locale myLocale;
     String curr_lang;
     TextView txt_curr;
-    Button start,stop;
+    Button start,stop,share;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -105,7 +105,7 @@ public class fragmet_location extends Fragment {
 
         fab=(FloatingActionButton)parentView.findViewById(R.id.fab);
         add_to_fav=(ImageView)parentView.findViewById(R.id.add_to_fav);
-        share=(ImageView)parentView.findViewById(R.id.share);
+        share=(Button) parentView.findViewById(R.id.share);
         location=(TextView)parentView.findViewById(R.id.location);
         search_ll=(LinearLayout)getActivity().findViewById(R.id.search_ll);
 
@@ -328,10 +328,15 @@ public class fragmet_location extends Fragment {
 
                             }
 
+
                             Intent intentAction = new Intent(getContext(), NavigationActivity.class);
                             intentAction.putExtra("action", "actionStop");
                             PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+                            intent.addCategory(Intent.CATEGORY_HOME);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
 
                             nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
                             noti = new Notification.Builder(getContext())
@@ -346,12 +351,10 @@ public class fragmet_location extends Fragment {
                             noti.flags = Notification.FLAG_NO_CLEAR;
                             nMN.notify(0, noti);
 
-
                             Toast.makeText(getContext(), getResources().getString(R.string.loc_set), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Intent.ACTION_MAIN);
-                            intent.addCategory(Intent.CATEGORY_HOME);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+
+                            //getActivity().finish();
+
                     }
                     else {
                         new AlertDialog.Builder(getContext()).setMessage("Please enable mock location from developer options")
@@ -430,31 +433,32 @@ public class fragmet_location extends Fragment {
 
                         }
 
-                        Intent intentAction = new Intent(getContext(),NavigationActivity.class);
-                        intentAction.putExtra("action","actionStop");
-                        PendingIntent pIntent = PendingIntent.getActivity(getContext(),1,intentAction,PendingIntent.FLAG_UPDATE_CURRENT);
 
+                        Intent intentAction = new Intent(getContext(), NavigationActivity.class);
+                        intentAction.putExtra("action", "actionStop");
+                        PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
 
                         nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
                         noti = new Notification.Builder(getContext())
                                 .setContentTitle(getResources().getString(R.string.new_mock))
-                                .setContentText(ci+" ,"+co+"\n"+la+","+lo)
-                                .setSmallIcon(R.drawable.logo)
+                                .setContentText(ci + " ," + co + "\n" + la + "," + lo)
+                                .setSmallIcon(R.drawable.ic_map_black_24dp)
                                 .setAutoCancel(true)
-                                .addAction(R.drawable.ic_stop_black_24dp,"Stop",pIntent)
+                                .addAction(R.drawable.ic_stop_black_24dp, "Stop", pIntent)
                                 .setOngoing(true)
                                 .build();
 
                         noti.flags = Notification.FLAG_NO_CLEAR;
                         nMN.notify(0, noti);
 
+                        Toast.makeText(getContext(), getResources().getString(R.string.loc_set), Toast.LENGTH_SHORT).show();
 
-
-                        Toast.makeText(getContext(),getResources().getString(R.string.loc_set),Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_HOME);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                       // getActivity().finish();
                     }
                     else {
                         new AlertDialog.Builder(getContext()).setMessage("Please enable mock location from developer options")
@@ -782,7 +786,7 @@ public class fragmet_location extends Fragment {
 
                 googleMap.clear();
 
-                LatLng loc = new LatLng(lati,longi);
+                LatLng loc = new LatLng(curr_lati,curr_longi);
 
                 if(map_type.equals("normal")) {
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

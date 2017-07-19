@@ -38,6 +38,8 @@
                     android:textSize="16dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     android:text="@string/search" />
 
                 <ImageView

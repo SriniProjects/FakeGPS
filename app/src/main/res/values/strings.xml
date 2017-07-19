@@ -17,6 +17,7 @@
     <string name="change_language">Change language</string>
 
     <string name="persian">Persian</string>
+    <!--<string name="english">"فارسی"</string>-->
     <string name="english">English</string>
 
     <string name="start">Start</string>
@@ -82,7 +83,7 @@
     <string name="set_loc">Press play button to set mock location</string>
     <string name="search_place">Search your place from search bar</string>
     <string name="navigate_his">Navigate to history option to see your previous set places</string>
-    <string name="navigate_fav">Navigate to history option to see your favourite places</string>
+    <string name="navigate_fav">Navigate to favourite option to see your favourite places</string>
     <string name="set_fav">Press star button to add current location in favourites</string>
     <string name="share">Press share button to share your current location</string>
     <string name="go_to_op">Navigate to Go To option to set location to any latitude and longitude</string>
