@@ -30,9 +30,7 @@ import android.widget.EditText;
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                startActivity(intent);
-
+                dismiss();
             }
         });
 

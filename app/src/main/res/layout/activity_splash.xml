@@ -11,14 +11,35 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/logo"
-        android:layout_marginTop="10dp"
+        android:layout_width="130dp"
+        android:layout_height="140dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="10dp"
         android:contentDescription="app logo"
         android:layout_gravity="center"
         />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="380dp">
     <include layout="@layout/fragment_instructions"/>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:gravity="bottom|right">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_border"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/next"
+        android:id="@+id/next"
+        android:textSize="16dp"
+        android:layout_marginRight="16dp" />
+    </RelativeLayout>
 
 </LinearLayout>

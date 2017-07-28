@@ -22,7 +22,7 @@ public class dialog_lang extends DialogFragment {
 
     View view;
     RadioGroup radioGroup;
-    String lang="english";
+    String lang="persian";
     RadioButton btn1,btn2;
     Button set;
     Locale myLocale;
@@ -95,6 +95,7 @@ public class dialog_lang extends DialogFragment {
         //updateTexts();
         Intent intent=new Intent(getActivity(),NavigationActivity.class);
         startActivity(intent);
+        //dismiss();
     }
 
     @Override

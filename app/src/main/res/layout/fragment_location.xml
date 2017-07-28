@@ -14,7 +14,14 @@
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="395dp" />
+
+            <!--<fragment-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:id="@+id/mapView"-->
+                <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="400dp"/>-->
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -72,6 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:weightSum="2"
+                        android:layout_marginTop="7dp"
                         android:orientation="horizontal">
                     <TextView
                         android:layout_width="wrap_content"
@@ -84,14 +92,15 @@
 
 
                         <Button
-                            android:layout_width="40dp"
+                            android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:text="@string/share_txt"
                             android:layout_gravity="right"
                             android:textSize="12dp"
+                            android:layout_marginBottom="7dp"
                             android:layout_marginRight="7dp"
                             android:id="@+id/share"
-                            android:backgroundTint="@color/colorPrimary"
+                            android:backgroundTint="@color/colorPrimaryDark"
                             android:textColor="@color/white"
                             android:background="@drawable/button_border"/>
 
@@ -107,23 +116,27 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:weightSum="2"
                         android:orientation="horizontal">
                     <Button
-                        android:layout_width="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/start"
+                        android:textSize="16sp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
                         android:textColor="@color/white"
                         android:id="@+id/btn_start"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@color/colorPrimary"/>
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/button_border"
+                        android:backgroundTint="@color/colorPrimaryDark"/>
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
+                            android:visibility="gone"
                             android:background="@color/white"/>
 
                         <Button
@@ -131,10 +144,12 @@
                             android:layout_weight="1"
                             android:layout_marginRight="10dp"
                             android:layout_marginLeft="10dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="20dp"
                             android:text="@string/stop"
+                            android:visibility="gone"
                             android:textColor="@color/white"
                             android:id="@+id/btn_stop"
+                            android:backgroundTint="@color/colorPrimaryDark"
                             android:background="@color/colorPrimary"/>
                     </LinearLayout>
                     </LinearLayout>
@@ -148,6 +163,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
+        android:visibility="gone"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_play_arrow_black_24dp"
         android:tint="#fff"/>

@@ -2,6 +2,7 @@ package com.fakegps.optimustechproject.fakegps;
 
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -91,14 +92,14 @@ public class NavigationActivity extends AppCompatActivity
             navigationView.getMenu().getItem(0).setChecked(true);
             setTitle(getResources().getString(R.string.set_mock));
         }
-        if(fragClassName.equals(fragment_history.class.getName())){
-            navigationView.getMenu().getItem(3).setChecked(true);
-            setTitle(getResources().getString(R.string.history));
-        }
-        if(fragClassName.equals(fragment_favourites.class.getName())){
-            navigationView.getMenu().getItem(4).setChecked(true);
-            setTitle(getResources().getString(R.string.fav));
-        }
+//        if(fragClassName.equals(fragment_history.class.getName())){
+//            navigationView.getMenu().getItem(3).setChecked(true);
+//            setTitle(getResources().getString(R.string.history));
+//        }
+//        if(fragClassName.equals(fragment_favourites.class.getName())){
+//            navigationView.getMenu().getItem(4).setChecked(true);
+//            setTitle(getResources().getString(R.string.fav));
+//        }
 
 
     }
@@ -159,13 +160,18 @@ public class NavigationActivity extends AppCompatActivity
         switch(id)
         {
             case R.id.mock:
+                //fragmentClass=fragmet_location.class;
                 fragmentClass=fragmet_location.class;
                 break;
             case R.id.history:
-                fragmentClass=fragment_history.class;
+               // fragmentClass=fragment_history.class;
+                dialog_history dialog_history = new dialog_history();
+                dialog_history.show(getFragmentManager(),getResources().getString(R.string.history));
                 break;
             case R.id.favourites:
-                fragmentClass=fragment_favourites.class;
+                //fragmentClass=fragment_favourites.class;
+                dialog_fav dialog_fav = new dialog_fav();
+                dialog_fav.show(getFragmentManager(),getResources().getString(R.string.fav));
                 break;
             case R.id.go_to:
                 dialog_goto dialog_goto = new dialog_goto();
@@ -182,6 +188,16 @@ public class NavigationActivity extends AppCompatActivity
             case R.id.instructions:
                 dialog_inst dialog_inst = new dialog_inst();
                 dialog_inst.show(getFragmentManager(),getResources().getString(R.string.inst));
+                break;
+            case R.id.exit:
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                break;
+            case R.id.about:
+                dialog_about_us dialog_about_us = new dialog_about_us();
+                dialog_about_us.show(getFragmentManager(),getResources().getString(R.string.change_language));
                 break;
 
             default:fragmentClass=fragmet_location.class;

@@ -44,9 +44,10 @@
             android:icon="@drawable/ic_perm_device_information_black_24dp"
             android:title="@string/about_us" />
         <item
-            android:id="@+id/faq"
+            android:id="@+id/exit"
             android:icon="@drawable/ic_question_answer_black_24dp"
-            android:title="@string/faq" />
+            android:title="@string/exit" />
+
 
     </group>
 

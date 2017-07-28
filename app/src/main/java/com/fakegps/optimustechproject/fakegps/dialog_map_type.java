@@ -105,8 +105,10 @@ public class dialog_map_type extends DialogFragment{
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),NavigationActivity.class);
-                startActivity(intent);
+//                Intent intent=new Intent(getActivity(),NavigationActivity.class);
+//                startActivity(intent);
+                fragmet_location.setMapType(DbHandler.getString(getActivity(),"map_type",""));
+                dismiss();
             }
         });
         return builder.create();

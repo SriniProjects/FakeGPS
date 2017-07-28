@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by satyam on 5/7/17.
  */
@@ -42,12 +44,14 @@ public class dialog_goto extends DialogFragment {
                     la = Double.valueOf(lati.getText().toString());
                     lo = Double.valueOf(longi.getText().toString());
 
-                    Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                    if(DbHandler.contains(getActivity(),"go_to_specific_search")){
-                        DbHandler.remove(getActivity(),"go_to_specific_search");
-                    }
-                    DbHandler.putString(getActivity(), "go_to_specific", String.valueOf(String.valueOf(la) + "%" + String.valueOf(lo)));
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), NavigationActivity.class);
+//                    if(DbHandler.contains(getActivity(),"go_to_specific_search")){
+//                        DbHandler.remove(getActivity(),"go_to_specific_search");
+//                    }
+//                    DbHandler.putString(getActivity(), "go_to_specific", String.valueOf(String.valueOf(la) + "%" + String.valueOf(lo)));
+//                    startActivity(intent);
+                    fragmet_location.setLoc(new LatLng(la,lo),"","");
+                    dismiss();
                 }
                 else{
                     Toast.makeText(getActivity(),getResources().getString(R.string.toast_enter_lat_lon),Toast.LENGTH_LONG).show();

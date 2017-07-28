@@ -31,27 +31,38 @@
                     android:id="@+id/delete"
                     android:tint="#ccc"
                     android:src="@drawable/ic_delete_black_24dp"/>
-            <TextView
-                android:layout_width="200dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/place"
                 android:text="New York"
+                    android:layout_weight="1.7"
+                    android:layout_marginRight="16dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:textColor="@color/colorPrimary"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right">
-                    <Button
-                        android:layout_width="70dp"
-                        android:layout_height="30dp"
-                        android:text="@string/locate"
+                    <!--<Button-->
+                        <!--android:layout_width="70dp"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:text="@string/locate"-->
+                        <!--android:id="@+id/locate"-->
+                        <!--android:textColor="@color/colorPrimaryDark"-->
+                        <!--android:background="@drawable/button_border"/>
+                       -->
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="#ccc"
+                        android:layout_weight="0.2"
                         android:id="@+id/locate"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:background="@drawable/button_border"/>
+                        android:src="@drawable/ic_add_location_black_24dp"/>
                     </LinearLayout>
 
             </LinearLayout>

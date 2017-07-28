@@ -1,6 +1,7 @@
 package com.fakegps.optimustechproject.fakegps;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.view_h
     @Override
     public void onBindViewHolder(final view_holder holder, int position) {
         holder.setIsRecyclable(false);
-
+        Log.e("fav",String.valueOf(history.getCity()));
         holder.place.setText(history.getCity().get(position)+" ,"+history.getCountry().get(position));
         holder.lati.setText(history.getLatitude().get(position)+" ,"+history.getLongitude().get(position));
 

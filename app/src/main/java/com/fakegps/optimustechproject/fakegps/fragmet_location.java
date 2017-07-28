@@ -1,87 +1,93 @@
 package com.fakegps.optimustechproject.fakegps;
 
-import android.Manifest;
+        import android.Manifest;
 
-import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.media.audiofx.BassBoost;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.app.AlertDialog;
+        import android.app.Notification;
+        import android.app.NotificationManager;
+        import android.app.PendingIntent;
+        import android.app.ProgressDialog;
+        import android.content.BroadcastReceiver;
+        import android.content.Context;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.content.pm.PackageManager;
+        import android.content.res.Configuration;
+        import android.content.res.Resources;
+        import android.location.Address;
+        import android.location.Criteria;
+        import android.location.Geocoder;
+        import android.location.Location;
+        import android.location.LocationManager;
+        import android.media.audiofx.BassBoost;
+        import android.os.Build;
+        import android.os.Bundle;
+        import android.os.SystemClock;
+        import android.provider.Settings;
+        import android.support.annotation.RequiresApi;
+        import android.support.design.widget.FloatingActionButton;
+        import android.support.v4.app.ActivityCompat;
+        import android.support.v4.app.Fragment;
+        import android.util.DisplayMetrics;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.Button;
+        import android.widget.ImageView;
+        import android.widget.LinearLayout;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
+        import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+        import com.google.android.gms.common.GooglePlayServicesRepairableException;
+        import com.google.android.gms.common.api.Status;
+        import com.google.android.gms.location.places.Place;
+        import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+        import com.google.android.gms.maps.CameraUpdateFactory;
+        import com.google.android.gms.maps.GoogleMap;
+        import com.google.android.gms.maps.MapView;
+        import com.google.android.gms.maps.MapsInitializer;
+        import com.google.android.gms.maps.OnMapReadyCallback;
+        import com.google.android.gms.maps.model.CameraPosition;
+        import com.google.android.gms.maps.model.LatLng;
+        import com.google.android.gms.maps.model.Marker;
+        import com.google.android.gms.maps.model.MarkerOptions;
+        import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+        import java.io.IOException;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Locale;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
-import static android.content.Context.NOTIFICATION_SERVICE;
+        import static android.app.Activity.RESULT_CANCELED;
+        import static android.app.Activity.RESULT_OK;
+        import static android.content.ContentValues.TAG;
+        import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by satyam on 5/7/17.
  */
 
-public class fragmet_location extends Fragment {
+public class fragmet_location extends Fragment implements OnMapReadyCallback {
 
-    MapView mMapView;
-    private GoogleMap googleMap;
+    static MapView mMapView;
+    static GoogleMap googleMap=null;
     View parentView;
+    static Geocoder geocoder;
     ImageView add_to_fav;
     ProgressDialog progress;
-    Double lati=21.0,longi=78.0,curr_lati=21.0,curr_longi=78.0;
+    static Double lati=21.0;
+    static Double longi=78.0;
+    Double curr_lati=21.0;
+    Double curr_longi=78.0;
     FloatingActionButton fab;
     History history,favourites;
     int flg=0;
-    TextView location;
+    static TextView location;
     LinearLayout search_ll;
-    String ci,co;
+    static String ci="";
+    static String co="";
     double la,lo;
     Gson gson=new Gson();
     List<Double> latitude=new ArrayList<Double>(),longitude=new ArrayList<Double>();
@@ -90,13 +96,14 @@ public class fragmet_location extends Fragment {
     List<String> city2=new ArrayList<String>(),country2=new ArrayList<String>();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     String[] l;
-    String map_type;
+    static String map_type;
     Notification noti;
     NotificationManager nMN;
     Locale myLocale;
     String curr_lang;
     TextView txt_curr;
     Button start,stop,share;
+    static Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -109,6 +116,9 @@ public class fragmet_location extends Fragment {
         location=(TextView)parentView.findViewById(R.id.location);
         search_ll=(LinearLayout)getActivity().findViewById(R.id.search_ll);
 
+        geocoder=new Geocoder(getContext(), Locale.getDefault());
+        context=getActivity();
+
         txt_curr=(TextView)parentView.findViewById(R.id.txt_curr);
 
         start=(Button)parentView.findViewById(R.id.btn_start);
@@ -118,17 +128,12 @@ public class fragmet_location extends Fragment {
         progress.setMessage(getResources().getString(R.string.locating));
         progress.setCancelable(false);
         progress.setIndeterminate(true);
-        // progress.show();
+        progress.show();
 
         la=lati;
         lo=longi;
-        ci="";
-        co="";
 
-        mMapView = (MapView) parentView.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
 
-        mMapView.onResume(); // needed to get the map to display immediately
 
         try {
             MapsInitializer.initialize(getContext());
@@ -140,12 +145,12 @@ public class fragmet_location extends Fragment {
             curr_lang=DbHandler.getString(getActivity(),"language","");
         }
         else{
-            curr_lang="english";
-            DbHandler.putString(getActivity(),"language","english");
+            curr_lang="persian";
+            DbHandler.putString(getActivity(),"language","persian");
         }
 
         txt_curr.setText(getResources().getString(R.string.current_location));
-       // changeLang(curr_lang);
+        // changeLang(curr_lang);
 
 
         if(DbHandler.contains(getActivity(),"map_type")){
@@ -163,15 +168,10 @@ public class fragmet_location extends Fragment {
             l=DbHandler.getString(getActivity(),"go_to_specific_search","").split("%");
             lati=Double.valueOf(l[0]);
             longi=Double.valueOf(l[1]);
-
-            la=lati;
-            lo=longi;
-            ci=l[2];
-            co="";
             location.setText(l[2]);
             Log.e("loc",String.valueOf(l));
 
-            setMarker();
+           // setMarker();
 
         }
 
@@ -185,7 +185,7 @@ public class fragmet_location extends Fragment {
             la=lati;
             lo=longi;
 
-            setMarker();
+           // setMarker();
 
         }
         else {
@@ -245,7 +245,7 @@ public class fragmet_location extends Fragment {
                         co=addresses.get(0).getCountryName();
 
                         location.setText(addresses.get(0).getLocality() + " " + addresses.get(0).getCountryName() + "\n" + String.valueOf(lati) + " " + String.valueOf(longi));
-                        setMarker();
+                        //setMarker();
                     } else {
                         location.setText("");
                         lati=gpsTracker.getLatitude();
@@ -257,7 +257,7 @@ public class fragmet_location extends Fragment {
                         curr_lati = lati;
                         curr_longi = longi;
 
-                        setMarker();
+                       // setMarker();
                     }
 
                 } catch (Exception e) {
@@ -271,7 +271,7 @@ public class fragmet_location extends Fragment {
                     curr_lati = lati;
                     curr_longi = longi;
 
-                    setMarker();
+                    //setMarker();
 
                     e.printStackTrace();
 
@@ -285,7 +285,18 @@ public class fragmet_location extends Fragment {
         }
 
 
+        mMapView = (MapView) parentView.findViewById(R.id.mapView);
+        mMapView.setVisibility(View.INVISIBLE);
+        mMapView.onCreate(savedInstanceState);
+
+        //mMapView.onDestroy();
+        // needed to get the map to display immediately
+
+        mMapView.getMapAsync(this);
+
+
         start.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
 
@@ -297,63 +308,78 @@ public class fragmet_location extends Fragment {
                         fab.setColorFilter(getResources().getColor(R.color.white));
 
 
-                            setMock();
+                        setMock();
 
-                            if (DbHandler.contains(getContext(), "history")) {
-                                history = gson.fromJson(DbHandler.getString(getContext(), "history", "{}"), History.class);
-                                latitude = history.getLatitude();
-                                longitude = history.getLongitude();
-                                city = history.getCity();
-                                country = history.getCountry();
-
-                                latitude.add(la);
-                                longitude.add(lo);
-                                city.add(ci);
-                                country.add(co);
-
-                                History his = new History(latitude, longitude, city, country);
-
-                                DbHandler.putString(getContext(), "history", gson.toJson(his));
-
-                            } else {
-
-                                latitude.add(la);
-                                longitude.add(lo);
-                                city.add(ci);
-                                country.add(co);
-
-                                History his = new History(latitude, longitude, city, country);
-
-                                DbHandler.putString(getContext(), "history", gson.toJson(his));
-
-                            }
+                        if (DbHandler.contains(getContext(), "history")) {
+                            latitude=new ArrayList<Double>();
+                            longitude=new ArrayList<Double>();
+                            city=new ArrayList<String>();
+                            country=new ArrayList<String>();
 
 
-                            Intent intentAction = new Intent(getContext(), NavigationActivity.class);
-                            intentAction.putExtra("action", "actionStop");
-                            PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+                            history = gson.fromJson(DbHandler.getString(getContext(), "history", "{}"), History.class);
+                            latitude = history.getLatitude();
+                            longitude = history.getLongitude();
+                            city = history.getCity();
+                            country = history.getCountry();
 
-                            Intent intent = new Intent(Intent.ACTION_MAIN);
-                            intent.addCategory(Intent.CATEGORY_HOME);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            //Toast.makeText(getContext(),ci+co,Toast.LENGTH_LONG).show();
 
-                            nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
-                            noti = new Notification.Builder(getContext())
-                                    .setContentTitle(getResources().getString(R.string.new_mock))
-                                    .setContentText(ci + " ," + co + "\n" + la + "," + lo)
-                                    .setSmallIcon(R.drawable.ic_map_black_24dp)
-                                    .setAutoCancel(true)
-                                    .addAction(R.drawable.ic_stop_black_24dp, "Stop", pIntent)
-                                    .setOngoing(true)
-                                    .build();
+                            latitude.add(lati);
+                            longitude.add(longi);
+                            city.add(ci);
+                            country.add(co);
 
-                            noti.flags = Notification.FLAG_NO_CLEAR;
-                            nMN.notify(0, noti);
+                            History his = new History(latitude, longitude, city, country);
 
-                            Toast.makeText(getContext(), getResources().getString(R.string.loc_set), Toast.LENGTH_SHORT).show();
+                            DbHandler.putString(getContext(), "history", gson.toJson(his));
 
-                            //getActivity().finish();
+                        } else {
+
+                            latitude=new ArrayList<Double>();
+                            longitude=new ArrayList<Double>();
+                            city=new ArrayList<String>();
+                            country=new ArrayList<String>();
+
+                            latitude.add(lati);
+                            longitude.add(longi);
+                            city.add(ci);
+                            country.add(co);
+
+                            //Toast.makeText(getContext(),ci+co,Toast.LENGTH_LONG).show();
+
+
+                            History his = new History(latitude, longitude, city, country);
+
+                            DbHandler.putString(getContext(), "history", gson.toJson(his));
+
+                        }
+
+
+                        Intent intentAction = new Intent(getContext(), NavigationActivity.class);
+                        intentAction.putExtra("action", "actionStop");
+                        PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+                        nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+                        noti = new Notification.Builder(getContext())
+                                .setContentTitle(getResources().getString(R.string.new_mock))
+                                .setContentText(ci + " ," + co + "\n" + lati + "," + longi)
+                                //.setSmallIcon(R.mipmap.ic_launcher)
+                                .setSmallIcon(R.mipmap.ic_launcher_small,10)
+                                .setColor(getActivity().getResources().getColor(R.color.colorPrimary))
+                                .setAutoCancel(true)
+                                .addAction(R.drawable.ic_stop_black_24dp, "Stop", pIntent)
+                                .setOngoing(true)
+                                .build();
+
+                        noti.flags = Notification.FLAG_NO_CLEAR;
+                        nMN.notify(0, noti);
+
+                        Toast.makeText(getContext(), getResources().getString(R.string.loc_set), Toast.LENGTH_SHORT).show();
+
+                        //getActivity().finish();
 
                     }
                     else {
@@ -371,6 +397,18 @@ public class fragmet_location extends Fragment {
                         }).create().show();
                     }
 
+                    start.setText(getActivity().getResources().getString(R.string.stop));
+
+                }
+                else{
+                    flg = 0;
+                    nMN.cancelAll();
+                    //setCurrent();
+                    //Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
+                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    fab.setColorFilter(getResources().getColor(R.color.white));
+
+                    start.setText(getActivity().getResources().getString(R.string.start));
                 }
             }
         });
@@ -381,7 +419,7 @@ public class fragmet_location extends Fragment {
                 if(flg==1) {
                     flg = 0;
                     nMN.cancelAll();
-                    setCurrent();
+                    //setCurrent();
                     //Toast.makeText(getContext(),String.valueOf(curr_lati),Toast.LENGTH_LONG).show();
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
                     fab.setColorFilter(getResources().getColor(R.color.white));
@@ -391,6 +429,7 @@ public class fragmet_location extends Fragment {
 
 
         fab.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
 
@@ -438,16 +477,12 @@ public class fragmet_location extends Fragment {
                         intentAction.putExtra("action", "actionStop");
                         PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_HOME);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
 
                         nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
                         noti = new Notification.Builder(getContext())
                                 .setContentTitle(getResources().getString(R.string.new_mock))
                                 .setContentText(ci + " ," + co + "\n" + la + "," + lo)
-                                .setSmallIcon(R.drawable.ic_map_black_24dp)
+                                .setSmallIcon(R.drawable.ic_launcher)
                                 .setAutoCancel(true)
                                 .addAction(R.drawable.ic_stop_black_24dp, "Stop", pIntent)
                                 .setOngoing(true)
@@ -458,7 +493,7 @@ public class fragmet_location extends Fragment {
 
                         Toast.makeText(getContext(), getResources().getString(R.string.loc_set), Toast.LENGTH_SHORT).show();
 
-                       // getActivity().finish();
+                        // getActivity().finish();
                     }
                     else {
                         new AlertDialog.Builder(getContext()).setMessage("Please enable mock location from developer options")
@@ -493,16 +528,24 @@ public class fragmet_location extends Fragment {
                 if(!location.getText().toString().equals("")) {
 
                     if (DbHandler.contains(getContext(), "favourites")) {
+                        latitude=new ArrayList<Double>();
+                        longitude=new ArrayList<Double>();
+                        city=new ArrayList<String>();
+                        country=new ArrayList<String>();
+
+
                         favourites = gson.fromJson(DbHandler.getString(getContext(), "favourites", "{}"), History.class);
                         latitude = favourites.getLatitude();
                         longitude = favourites.getLongitude();
                         city = favourites.getCity();
                         country = favourites.getCountry();
 
-                        latitude.add(la);
-                        longitude.add(lo);
+                        latitude.add(lati);
+                        longitude.add(longi);
                         city.add(ci);
                         country.add(co);
+                       // Toast.makeText(getContext(),ci+co,Toast.LENGTH_LONG).show();
+
 
                         History fav = new History(latitude, longitude, city, country);
 
@@ -510,9 +553,16 @@ public class fragmet_location extends Fragment {
 
                     } else {
 
+                        latitude=new ArrayList<Double>();
+                        longitude=new ArrayList<Double>();
+                        city=new ArrayList<String>();
+                        country=new ArrayList<String>();
+
                         latitude.add(la);
                         longitude.add(lo);
                         city.add(ci);
+                      //  Toast.makeText(getContext(),ci+co,Toast.LENGTH_LONG).show();
+
                         country.add(co);
 
                         History fav = new History(latitude, longitude, city, country);
@@ -530,7 +580,7 @@ public class fragmet_location extends Fragment {
                 else{
                     Toast.makeText(getContext(), getResources().getString(R.string.no_loc), Toast.LENGTH_SHORT).show();
                 }
-               // setLocale("hi");
+                // setLocale("hi");
             }
         });
 
@@ -572,14 +622,273 @@ public class fragmet_location extends Fragment {
         return parentView;
     }
 
-    public void setMarker(){
+//    public void setMarker(){
+//
+//        final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
+//        final GPSTracker gpsTracker=new GPSTracker(getContext());
+//
+//        mMapView.getMapAsync(new OnMapReadyCallback() {
+//            @Override
+//            public void onMapReady(GoogleMap mMap) {
+//                googleMap = mMap;
+//
+//                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//                    return;
+//                }
+//                googleMap.setMyLocationEnabled(true);
+//                googleMap.getUiSettings().setZoomControlsEnabled(true);
+//
+//                 loc = new LatLng(lati,longi);
+//
+//                if(map_type.equals("normal")) {
+//                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//                }
+//                if(map_type.equals("terrain")) {
+//                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+//                }
+//                if(map_type.equals("satellite")) {
+//                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+//                }
+//                if(map_type.equals("hybrid")) {
+//                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+//                }
+//                if(map_type.equals("none")) {
+//                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+//                }
+//
+//                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+//
+//                List<Address> addresses2;
+//                try {
+//                    addresses2 = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
+//                    if (addresses2.size() != 0) {
+//                        ci=addresses2.get(0).getLocality();
+//                        co=addresses2.get(0).getCountryName();
+//                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " , " + String.valueOf(longi));
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
+//
+//                }
+//
+//                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
+//                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//
+//                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//                    @Override
+//                    public void onMapClick(LatLng latLng) {
+//                        googleMap.clear();
+//                        googleMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+//
+//                        lati=latLng.latitude;
+//                        longi=latLng.longitude;
+//
+//                        la=lati;
+//                        lo=longi;
+//                        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
+//                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//
+//                        List<Address> addresses;
+//                        try {
+//                            addresses = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
+//                            if (addresses.size() != 0) {
+//                                location.setText(addresses.get(0).getLocality()+" "+addresses.get(0).getCountryName()+"\n"+String.valueOf(lati)+" , "+String.valueOf(longi));
+//
+//                                ci=addresses.get(0).getLocality();
+//                                co=addresses.get(0).getCountryName();
+//                                la=lati;
+//                                lo=longi;
+//
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            location.setText(String.valueOf(lati)+" , "+String.valueOf(longi));
+//                            Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
+//                        }
+//
+//
+//                    }
+//                });
+//                googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//                    @Override
+//                    public void onMarkerDragStart(Marker marker) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onMarkerDrag(Marker marker) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onMarkerDragEnd(Marker marker) {
+//                        lati=marker.getPosition().latitude;
+//                        longi=marker.getPosition().longitude;
+//
+//
+//                    }
+//                });
+//
+//            }
+//        });
+//
+//    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                Toast.makeText(getContext(),String.valueOf(place.getName())+"\n"+String.valueOf(place.getLatLng().latitude)+" , "+String.valueOf(place.getLatLng().longitude),Toast.LENGTH_LONG).show();
+                LatLng l=place.getLatLng();
+
+                ci=String.valueOf(place.getName());
+
+//                Intent intent = new Intent(getActivity(), NavigationActivity.class);
+//                DbHandler.putString(getActivity(), "go_to_specific_search", String.valueOf(String.valueOf(l.latitude) + "%" + String.valueOf(l.longitude)+"%"+String.valueOf(place.getName())+" "+String.valueOf(l.latitude)+" "+String.valueOf(l.longitude)));
+//                startActivity(intent);
+                fragmet_location.setLoc(l,place.getName().toString(),"");
+
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+
+
+    private void setMock(){
+        LocationManager lm = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy( Criteria.ACCURACY_FINE );
+
+        String mocLocationProvider = LocationManager.GPS_PROVIDER;//lm.getBestProvider( criteria, true );
+
+        if (mocLocationProvider == null) {
+            Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        lm.addTestProvider(mocLocationProvider, false, false,
+                false, false, true, true, true, 0, 5);
+        lm.setTestProviderEnabled(mocLocationProvider, true);
+
+        Location loc = new Location(mocLocationProvider);
+        Location mockLocation = new Location(mocLocationProvider); // a string
+        mockLocation.setLatitude(lati);  // double
+        mockLocation.setLongitude(longi);
+        mockLocation.setAltitude(loc.getAltitude());
+        mockLocation.setTime(System.currentTimeMillis());
+        mockLocation.setAccuracy(1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+        }
+        lm.setTestProviderLocation(mocLocationProvider, mockLocation);
+
+
+
+
+    }
+
+    private void setCurrent(){
 
         final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
-        final GPSTracker gpsTracker=new GPSTracker(getContext());
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+
+                googleMap.clear();
+
+                LatLng loc = new LatLng(curr_lati,curr_longi);
+
+                if(map_type.equals("normal")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+                if(map_type.equals("terrain")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }
+                if(map_type.equals("satellite")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }
+                if(map_type.equals("hybrid")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+                if(map_type.equals("none")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                }
+
+                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+
+                List<Address> addresses2;
+                try {
+                    addresses2 = geocoder.getFromLocation(Double.valueOf(curr_lati), Double.valueOf(curr_longi), 1);
+                    if (addresses2.size() != 0) {
+                        ci=addresses2.get(0).getLocality();
+                        co=addresses2.get(0).getCountryName();
+                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " , " + String.valueOf(longi));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+
+                }
+
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap mMap) {
+
+        progress.dismiss();
+        mMapView.setVisibility(View.VISIBLE);
+        final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
+        final GPSTracker gpsTracker=new GPSTracker(getContext());
+
                 googleMap = mMap;
 
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -661,124 +970,40 @@ public class fragmet_location extends Fragment {
 
                     }
                 });
-                googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                    @Override
-                    public void onMarkerDragStart(Marker marker) {
+//                googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//                    @Override
+//                    public void onMarkerDragStart(Marker marker) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onMarkerDrag(Marker marker) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onMarkerDragEnd(Marker marker) {
+//                        lati=marker.getPosition().latitude;
+//                        longi=marker.getPosition().longitude;
+//
+//
+//                    }
+//                });
 
-                    }
-
-                    @Override
-                    public void onMarkerDrag(Marker marker) {
-
-                    }
-
-                    @Override
-                    public void onMarkerDragEnd(Marker marker) {
-                        lati=marker.getPosition().latitude;
-                        longi=marker.getPosition().longitude;
-
-
-                    }
-                });
-
-            }
-        });
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                Toast.makeText(getContext(),String.valueOf(place.getName())+"\n"+String.valueOf(place.getLatLng().latitude)+" , "+String.valueOf(place.getLatLng().longitude),Toast.LENGTH_LONG).show();
-                LatLng l=place.getLatLng();
-
-                Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                DbHandler.putString(getActivity(), "go_to_specific_search", String.valueOf(String.valueOf(l.latitude) + "%" + String.valueOf(l.longitude)+"%"+String.valueOf(place.getName())+" "+String.valueOf(l.latitude)+" "+String.valueOf(l.longitude)));
-                startActivity(intent);
-
-                Log.i(TAG, "Place: " + place.getName());
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
-                // TODO: Handle the error.
-                Log.i(TAG, status.getStatusMessage());
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
-
-
-
-    private void setMock(){
-        LocationManager lm = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy( Criteria.ACCURACY_FINE );
-
-        String mocLocationProvider = LocationManager.GPS_PROVIDER;//lm.getBestProvider( criteria, true );
-
-            if (mocLocationProvider == null) {
-                Toast.makeText(getContext(), getResources().getString(R.string.no_loc_provider), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            lm.addTestProvider(mocLocationProvider, false, false,
-                    false, false, true, true, true, 0, 5);
-            lm.setTestProviderEnabled(mocLocationProvider, true);
-
-            Location loc = new Location(mocLocationProvider);
-            Location mockLocation = new Location(mocLocationProvider); // a string
-            mockLocation.setLatitude(lati);  // double
-            mockLocation.setLongitude(longi);
-            mockLocation.setAltitude(loc.getAltitude());
-            mockLocation.setTime(System.currentTimeMillis());
-            mockLocation.setAccuracy(1);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-            }
-            lm.setTestProviderLocation(mocLocationProvider, mockLocation);
 
 
 
 
     }
 
-    private void setCurrent(){
-
-        final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
+    public static void setLoc(final LatLng latLng,final String place1,final String place2){
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                     return;
                 }
@@ -786,7 +1011,7 @@ public class fragmet_location extends Fragment {
 
                 googleMap.clear();
 
-                LatLng loc = new LatLng(curr_lati,curr_longi);
+                LatLng loc = new LatLng(latLng.latitude,latLng.longitude);
 
                 if(map_type.equals("normal")) {
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -804,20 +1029,30 @@ public class fragmet_location extends Fragment {
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
                 }
 
-                googleMap.addMarker(new MarkerOptions().position(loc).title(getResources().getString(R.string.marker_title)).snippet(getResources().getString(R.string.marker_description)));
+                lati=latLng.latitude;
+                longi=latLng.longitude;
 
-                List<Address> addresses2;
-                try {
-                    addresses2 = geocoder.getFromLocation(Double.valueOf(curr_lati), Double.valueOf(curr_longi), 1);
-                    if (addresses2.size() != 0) {
-                        ci=addresses2.get(0).getLocality();
-                        co=addresses2.get(0).getCountryName();
-                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " , " + String.valueOf(longi));
+                googleMap.addMarker(new MarkerOptions().position(loc).title(context.getResources().getString(R.string.marker_title)).snippet(context.getResources().getString(R.string.marker_description)));
+
+                if(place1.equals("") && place2.equals("")) {
+                    List<Address> addresses2;
+                    try {
+                        addresses2 = geocoder.getFromLocation(Double.valueOf(latLng.latitude), Double.valueOf(latLng.longitude), 1);
+                        if (addresses2.size() != 0) {
+                            ci = addresses2.get(0).getLocality();
+                            co = addresses2.get(0).getCountryName();
+                            location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(latLng.latitude) + " , " + String.valueOf(latLng.longitude));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        location.setText(String.valueOf(latLng.latitude) + " , " + String.valueOf(latLng.longitude));
+
+                        Toast.makeText(context, context.getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
-
+                }
+                else {
+                    location.setText(place1 + " " + place2 + "\n" + String.valueOf(latLng.latitude) + " , " + String.valueOf(latLng.longitude));
                 }
 
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
@@ -827,6 +1062,59 @@ public class fragmet_location extends Fragment {
         });
     }
 
+    public static void setMapType(final String map_typ){
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+
+                LatLng loc = new LatLng(lati,longi);
+
+                if(map_typ.equals("normal")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+                if(map_typ.equals("terrain")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }
+                if(map_typ.equals("satellite")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }
+                if(map_typ.equals("hybrid")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+                if(map_typ.equals("none")) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                }
+
+               // googleMap.addMarker(new MarkerOptions().position(loc).title(context.getResources().getString(R.string.marker_title)).snippet(context.getResources().getString(R.string.marker_description)));
+
+//                List<Address> addresses2;
+//                try {
+//                    addresses2 = geocoder.getFromLocation(Double.valueOf(lati), Double.valueOf(longi), 1);
+//                    if (addresses2.size() != 0) {
+//                        ci=addresses2.get(0).getLocality();
+//                        co=addresses2.get(0).getCountryName();
+//                        location.setText(addresses2.get(0).getLocality() + " " + addresses2.get(0).getCountryName() + "\n" + String.valueOf(lati) + " , " + String.valueOf(longi));
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(context,context.getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+//
+//                }
+
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            }
+        });
+    }
 
 
 //    public void setLocale(String lang) {

@@ -23,7 +23,7 @@ public class Splash extends AppCompatActivity {
     ImageView iv;
     String curr_lang;
     Locale myLocale;
-    Button close;
+    Button close,next;
 
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -33,60 +33,67 @@ public class Splash extends AppCompatActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        if(DbHandler.contains(Splash.this,"language")){
+            curr_lang=DbHandler.getString(Splash.this,"language","");
+        }
+        else{
+            curr_lang="persian";
+            DbHandler.putString(Splash.this,"language","persian");
+        }
+
+        if (curr_lang.equals("english")) {
+            changeLang("en");
+        }
+        else {
+            changeLang("fa");
+        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         close=(Button) findViewById(R.id.close);
         close.setVisibility(View.GONE);
-        StartAnimations();
-    }
-    private void StartAnimations() {
 
-        Thread splashTread = new Thread() {
+        next=(Button)findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                try {
-                    int waited = 0;
-                    while (_active && (waited < _splashTime)) {
-                        sleep(100);
-                        if (_active) {
-                            waited += 100;
-                        }
-                    }
-                } catch (Exception e) {
-
-                } finally {
-                    if(DbHandler.contains(Splash.this,"language")){
-                        curr_lang=DbHandler.getString(Splash.this,"language","");
-                    }
-                    else{
-                        curr_lang="english";
-                        DbHandler.putString(Splash.this,"language","english");
-                    }
-
-                    if (curr_lang.equals("english")) {
-                        changeLang("en");
-                    }
-                    else {
-                        changeLang("fa");
-                    }
-
-                    if(DbHandler.getBoolean(Splash.this,"isLoggedIn",false)){
-                        Intent intent = new Intent(Splash.this,NavigationActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    else {
+            public void onClick(View v) {
                         Intent intent = new Intent(Splash.this, NavigationActivity.class);
                         startActivity(intent);
                         finish();
-                    }
-                }
-            };
-        };
-        splashTread.start();
-
+            }
+        });
+        //StartAnimations();
     }
+//    private void StartAnimations() {
+//
+//        Thread splashTread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    int waited = 0;
+//                    while (_active && (waited < _splashTime)) {
+//                        sleep(100);
+//                        if (_active) {
+//                            waited += 100;
+//                        }
+//                    }
+//                } catch (Exception e) {
+//
+//                } finally {
+//
+//                        Intent intent = new Intent(Splash.this, NavigationActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//
+//                }
+//            };
+//        };
+//        splashTread.start();
+//
+//    }
 
     public void changeLang(String lang)
     {
