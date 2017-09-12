@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/satyam/AndroidStudioProjects/FakeGPS/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ba0c01646c371accbc7c3f5c961f9e26600e5d2f">
+        <dex dex="/home/satyam/AndroidStudioProjects/FakeGPS/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_ae8f567adac3c375cc399c3316cd50b6fb66f417/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/satyam/AndroidStudioProjects/FakeGPS/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/home/satyam/AndroidStudioProjects/FakeGPS/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_fb2f4235ed59a668502422f1005737c4f346a4ee/classes.dex" />
+    </item>
+
+</items>
