@@ -26,6 +26,8 @@ public class dialog_goto extends DialogFragment {
     Button submit;
     double la=0.0,lo=0.0;
 
+    /////////////// GO TO SPECIFIC LATITUDE LONGITUDE /////////
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();

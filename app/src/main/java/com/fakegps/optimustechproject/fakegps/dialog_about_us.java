@@ -19,6 +19,8 @@ public class dialog_about_us  extends DialogFragment {
     View view;
     TextView version;
 
+    ////////////// ABOUT US DIALOG FRAGMENT /////////
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();

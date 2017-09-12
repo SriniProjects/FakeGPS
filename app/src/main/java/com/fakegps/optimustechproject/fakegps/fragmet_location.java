@@ -105,6 +105,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
     Button start,stop,share;
     static Context context;
 
+    ///////////// LOCATION FRAGMENT ON NAVIGATION ACTIVITY ///////
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -164,6 +166,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
         final Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
         final GPSTracker gpsTracker=new GPSTracker(getContext());
 
+        //////////// SET MARKER IF RETURN FROM GO TO DIALOG FRAGMENT ///////
+
         if(DbHandler.contains(getActivity(),"go_to_specific_search")){
             l=DbHandler.getString(getActivity(),"go_to_specific_search","").split("%");
             lati=Double.valueOf(l[0]);
@@ -203,7 +207,9 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
             } catch(Exception ex) {}
 
             if(!gps_enabled && !network_enabled) {
-                // notify user
+
+                // notify user TO ACCEPT GPS PERMISSIONS ////////////////
+
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                 dialog.setMessage(getContext().getResources().getString(R.string.enable_gps));
                 dialog.setPositiveButton(getContext().getResources().getString(R.string.settings), new DialogInterface.OnClickListener() {
@@ -226,6 +232,7 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
                 dialog.show();
             }
 
+            ////////////// SET CURRENT LOCATION ON MAP ///////////
 
             if (gpsTracker.canGetLocation()) {
                 progress.dismiss();
@@ -295,6 +302,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this);
 
 
+        /////////////// SET FAKE LOCATION /////////////////////
+
         start.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -360,7 +369,7 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
                         intentAction.putExtra("action", "actionStop");
                         PendingIntent pIntent = PendingIntent.getActivity(getContext(), 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
+                        //////////////// NOTIFICATION ON SETTING MOCK LOCATION //////
 
                         nMN = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
                         noti = new Notification.Builder(getContext())
@@ -383,6 +392,9 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
 
                     }
                     else {
+
+                        ///////////////// ALERT TO ACCEPT MOCK LOCATION PERMISSION /////////////
+
                         new AlertDialog.Builder(getContext()).setMessage("Please enable mock location from developer options")
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
@@ -401,6 +413,9 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
 
                 }
                 else{
+
+                    //////////////////// REMOVE NOTIFICATION ON STOPPING FAKE LOCATION /////////
+
                     flg = 0;
                     nMN.cancelAll();
                     //setCurrent();
@@ -521,6 +536,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        //////////////////// ADD TO FAVOURITES ////////////
+
         add_to_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -584,6 +601,9 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        /////////////// SHARE YOUR CURRENT LOCATION ////////////
+
+
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -601,6 +621,7 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        //////////// SEARCH YOUR DREAM LOCATION :-} //////////////
 
         search_ll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -763,6 +784,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    ////////////// MAP LIFECYCLE //////////
+
     @Override
     public void onResume() {
         super.onResume();
@@ -787,7 +810,7 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
-
+    ///////////// FUNCTION FOR SETTING MOCK LOCATION ////
 
     private void setMock(){
         LocationManager lm = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -821,6 +844,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
 
 
     }
+
+    //////////// FUNCTION FOR SETTING CURRENT LOCATION /////////
 
     private void setCurrent(){
 
@@ -880,6 +905,8 @@ public class fragmet_location extends Fragment implements OnMapReadyCallback {
         });
     }
 
+
+    ///////////////////// SET MARKER ON MAP /////////////
 
     @Override
     public void onMapReady(GoogleMap mMap) {

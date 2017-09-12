@@ -26,6 +26,8 @@ public class dialog_map_type extends DialogFragment{
     RadioButton btn1,btn2,btn3,btn4,btn5;
     Button set;
 
+    ////////// CHANGE MAP TYPE DIALOG FRAGMENT ///////
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();

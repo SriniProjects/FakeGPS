@@ -27,6 +27,8 @@ public class dialog_lang extends DialogFragment {
     Button set;
     Locale myLocale;
 
+    //////////// CHANGE LANGUAGE DIALOG ///////////
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -82,6 +84,8 @@ public class dialog_lang extends DialogFragment {
         return builder.create();
     }
 
+    ////////// CHANGE APP LANGUAGE FUNCTION ////////
+
     public void changeLang(String lang)
     {
         if (lang.equalsIgnoreCase(""))
@@ -97,6 +101,8 @@ public class dialog_lang extends DialogFragment {
         startActivity(intent);
         //dismiss();
     }
+
+    ////////// CHANGE APP LOCALE ///////
 
     @Override
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {

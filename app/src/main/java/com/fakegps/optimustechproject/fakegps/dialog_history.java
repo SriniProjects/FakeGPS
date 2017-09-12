@@ -26,6 +26,8 @@ public class dialog_history extends DialogFragment {
     static AlertDialog.Builder builder;
     Button close;
 
+    //////////// HISTORY DIALOG FRAGMENT /////////
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -51,6 +53,8 @@ public class dialog_history extends DialogFragment {
             recyclerView.setAdapter(adapter_history);
         }
         else{
+            ////////// DISPLAY MESSAGE IF NO HISTORY ///////////
+
             recyclerView.setVisibility(View.GONE);
             no_mock.setVisibility(View.VISIBLE);
             no_mock.setText(getResources().getString(R.string.no_loc));

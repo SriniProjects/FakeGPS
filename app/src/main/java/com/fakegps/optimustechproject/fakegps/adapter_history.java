@@ -14,6 +14,8 @@ import android.widget.TextView;
 public class adapter_history extends RecyclerView.Adapter<adapter_history.view_holder> {
 
 
+    //////////// HISTORY RECYCLER ADAPTER /////
+
     History history;
     public adapter_history(History history) {
 

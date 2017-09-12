@@ -34,6 +34,8 @@ public class Splash extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        //////////// SET APP LOCALE //////
+
         if(DbHandler.contains(Splash.this,"language")){
             curr_lang=DbHandler.getString(Splash.this,"language","");
         }

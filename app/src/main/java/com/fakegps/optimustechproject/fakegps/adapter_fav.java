@@ -23,6 +23,8 @@ import com.google.gson.Gson;
 public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
 
 
+    ///////////////////  FAVOURITES RECYCLER ADAPTER //////////
+
     History fav,fav2;
     Context context;
     Gson gson=new Gson();
@@ -43,7 +45,6 @@ public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
     public void onBindViewHolder(final view_holder holder, int position) {
         holder.setIsRecyclable(false);
 
-        Log.e("fav",String.valueOf(fav.getCity()));
         holder.place.setText(fav.getCity().get(position)+" , "+fav.getCountry().get(position));
         holder.lati.setText(fav.getLatitude().get(position)+" , "+fav.getLongitude().get(position));
 
@@ -67,6 +68,8 @@ public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
             locate=(ImageView)itemView.findViewById(R.id.locate);
             delete=(ImageView)itemView.findViewById(R.id.delete);
 
+            ///////////  REMOVE FAVOURITE  ITEM  /////////
+
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -88,6 +91,8 @@ public class adapter_fav extends RecyclerView.Adapter<adapter_fav.view_holder> {
 //                    notifyItemRangeChanged(getAdapterPosition(),fav.getLatitude().size());
                 }
             });
+
+            /////////  LOCATE FAVOURITE PLACE ON MAP ///////
 
             locate.setOnClickListener(new View.OnClickListener() {
                 @Override

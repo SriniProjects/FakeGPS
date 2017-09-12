@@ -26,6 +26,8 @@ public class dialog_fav extends DialogFragment {
     static AlertDialog dialog;
     Button close;
 
+    /////////// FAVOURITES DIALOG FRAGMENT /////////
+
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -53,6 +55,8 @@ public class dialog_fav extends DialogFragment {
             recyclerView.setAdapter(adapter_fav);
         }
         else{
+            ////////// DISPLAY MESSAGE IF NO FAVOURITES ///////////
+
             recyclerView.setVisibility(View.GONE);
             no_mock.setVisibility(View.VISIBLE);
             no_mock.setText(getResources().getString(R.string.no_fav));
